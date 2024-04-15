@@ -43,7 +43,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -127,20 +127,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="Resource.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SUIN.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TimeSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="SUIN.cpp" />
+    <ClCompile Include="TimeSystem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Desktop\AnyConv.com__9259357_11zon.jpg" />
+    <Image Include="..\..\..\..\desktop\bitmap10.bmp" />
+    <Image Include="small.ico" />
+    <Image Include="SUIN.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SUIN.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico" />
-    <Image Include="SUIN.ico" />
+    <None Include="..\..\..\..\desktop\bmp2.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

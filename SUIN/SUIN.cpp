@@ -1,174 +1,132 @@
-﻿#include "framework.h"
+﻿#include <cstdlib>
 #include "SUIN.h"
+#include "GameManager.h"
 
-#define MAX_LOADSTRING 100
+namespace global
+{
+	WinApp winApp;
 
-HINSTANCE hInst;                                // 현재 인스턴스입니다.
-WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
-WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+	const WinApp& GetWinApp()
+	{
+		return winApp;
+	}
+}
 
-// 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
-ATOM                MyRegisterClass(HINSTANCE hInstance);
-BOOL                InitInstance(HINSTANCE, int);
-LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+constexpr int SCREEN_START_LEFT = 10;
 
-//메인함수,,
+constexpr int SCREEN_START_TOP = 10;
+
+constexpr int SCREEN_WIDTH = 1024;
+
+constexpr int SCREEN_HEIGHT = 768;
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-                     _In_opt_ HINSTANCE hPrevInstance,
-                     _In_ LPWSTR    lpCmdLine,
-                     _In_ int       nCmdShow)
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPWSTR    lpCmdLine,
+	_In_ int       nCmdShow)
 {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: 여기에 코드를 입력합니다.
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // 전역 문자열을 초기화합니다.
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_SUIN, szWindowClass, MAX_LOADSTRING);
-    MyRegisterClass(hInstance);
+	global::winApp.Initialize(hInstance);
 
-    // 애플리케이션 초기화를 수행합니다:
-    if (!InitInstance (hInstance, nCmdShow))
-    {
-        return FALSE;
-    }
+	global::winApp.Run();
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SUIN));
+	global::winApp.Finalize();
 
-    MSG msg;
-
-    // 기본 메시지 루프입니다:
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
-
-    return (int) msg.wParam;
+	return EXIT_SUCCESS;
 }
 
-
-
-//  함수: MyRegisterClass()
-//  용도: 창 클래스를 등록합니다.
-ATOM MyRegisterClass(HINSTANCE hInstance)
+void PlaceInCenterOfScreen(HWND window, DWORD style, DWORD exStyle)
 {
-    WNDCLASSEXW wcex;
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-    wcex.cbSize = sizeof(WNDCLASSEX);
+	RECT clientRect;
+	GetClientRect(window, &clientRect);
 
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = WndProc;
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SUIN));
-    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_SUIN);
-    wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+	int clientWidth = clientRect.right - clientRect.left;
+	int clientHeight = clientRect.bottom - clientRect.top;
 
-    return RegisterClassExW(&wcex);
+	SetWindowPos(window, NULL,
+		screenWidth / 2 - clientWidth / 2,
+		screenHeight / 2 - clientHeight / 2,
+		clientWidth, clientHeight, 0
+	);
 }
 
-//
-//   함수: InitInstance(HINSTANCE, int)
-//
-//   용도: 인스턴스 핸들을 저장하고 주 창을 만듭니다.
-//
-//   주석:
-//
-//        이 함수를 통해 인스턴스 핸들을 전역 변수에 저장하고
-//        주 프로그램 창을 만든 다음 표시합니다.
-//
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+LRESULT CALLBACK WinApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-   hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
+	switch (message)
+	{
+	case WM_CREATE:
+	{
+		PlaceInCenterOfScreen(hWnd, WS_OVERLAPPEDWINDOW, WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
+	}
+	break;
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
-
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
-
-   return TRUE;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
 }
 
-//
-//  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  용도: 주 창의 메시지를 처리합니다.
-//
-//  WM_COMMAND  - 애플리케이션 메뉴를 처리합니다.
-//  WM_PAINT    - 주 창을 그립니다.
-//  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
-//
-//
-//화면이안보이네,,^^
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+void WinApp::Initialize(HINSTANCE hInstance)
 {
-    switch (message)
-    {
-    case WM_COMMAND:
-        {
-            int wmId = LOWORD(wParam);
-            // 메뉴 선택을 구문 분석합니다:
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
-        }
-        break;
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            EndPaint(hWnd, &ps);
-        }
-        break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        break;
-    default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
-    }
-    return 0;
+	m_hInstance = hInstance;
+
+	const TCHAR* appName = TEXT("Test Game Framework");
+
+	//Step 1: Registering the Window Class
+
+	WNDCLASS wndClass;
+
+	wndClass.style = CS_HREDRAW | CS_VREDRAW;
+	wndClass.lpfnWndProc = WndProc;
+	wndClass.cbClsExtra = 0;
+	wndClass.cbWndExtra = 0;
+	wndClass.hInstance = hInstance;
+	wndClass.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
+	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wndClass.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
+	wndClass.lpszMenuName = NULL;
+	wndClass.lpszClassName = appName;
+
+	RegisterClass(&wndClass);
+
+	// Step 2: Creating the Window
+
+	RECT rect{ SCREEN_START_LEFT, SCREEN_START_TOP,
+	SCREEN_START_LEFT + SCREEN_WIDTH, SCREEN_START_TOP + SCREEN_HEIGHT };
+
+	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
+
+	int width = rect.right - rect.left;
+	int height = rect.bottom - rect.top;
+
+	m_hWnd = CreateWindow(appName, appName, WS_OVERLAPPED | WS_SYSMENU,
+		SCREEN_START_LEFT, SCREEN_START_TOP, width, height, NULL, NULL, hInstance, NULL);
+
+	ShowWindow(m_hWnd, SW_SHOWNORMAL);
+	UpdateWindow(m_hWnd);
+
+	// Step 3: Game Initialize Here
+	game::GameManager::GetInstance()->Initialize();
 }
 
-// 정보 대화 상자에서 버튼 기능 처리
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+void WinApp::Run()
 {
-    UNREFERENCED_PARAMETER(lParam);
-    switch (message)
-    {
-    case WM_INITDIALOG:
-        return (INT_PTR)TRUE;
+	// Step 4: Game Loop Here
+	game::GameManager::GetInstance()->Run();
+}
 
-    case WM_COMMAND:
-        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-        {
-            EndDialog(hDlg, LOWORD(wParam));
-            return (INT_PTR)TRUE;
-        }
-        break;
-    }
-    return (INT_PTR)FALSE;
+void WinApp::Finalize()
+{
+	// Step 5: Game Finalize Here
+	game::GameManager::GetInstance()->Finalize();
 }
