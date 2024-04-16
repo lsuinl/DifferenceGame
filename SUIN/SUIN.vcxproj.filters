@@ -59,10 +59,124 @@
     <Image Include="SUIN.ico">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="..\..\..\..\desktop\bitmap10.bmp">
+    <Image Include="source\1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\1_1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\2_2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\3.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\3_3.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\4.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\4_4.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\5.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\5_5.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\6.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\6_6.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\7.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\7_7.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\8.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\8_8.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\9.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\9_9.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\10.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\10_10.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\11.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\11_11.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\12.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\bitmap10.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="..\..\..\..\Desktop\AnyConv.com__9259357_11zon.jpg">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\12_12.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\13.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\13_13.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\14.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\14_14.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\15.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\15_15.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\16_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\17.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\17_17.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\18.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\18_18.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\19.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\19_19.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
@@ -70,10 +184,5 @@
     <ResourceCompile Include="SUIN.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\desktop\bmp2.bin">
-      <Filter>리소스 파일</Filter>
-    </None>
   </ItemGroup>
 </Project>

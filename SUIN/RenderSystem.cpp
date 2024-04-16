@@ -151,7 +151,9 @@ namespace render
 
     HBITMAP LoadImages(const char* path)
     {
-        HBITMAP hBitmap = (HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        //68-29=39 세로
+        //16가로
+        HBITMAP hBitmap = (HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, 1008, 729, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
         return hBitmap;
     }

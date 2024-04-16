@@ -221,7 +221,7 @@ namespace game
 
 	void GameManager::DrawBackGround()
 	{
-		hBackmap = render::LoadImages("bitmap10.bmp");  // 함수 이름 수정
+		hBackmap = render::LoadImages("source/1.bmp");  // 함수 이름 수정
 		render::DrawBitmap(0, 0, hBackmap);
 		render::ReleaseImage(hBackmap);  // 이미지 메모리 해제
 	}
