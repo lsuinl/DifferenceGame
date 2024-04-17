@@ -70,6 +70,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -104,10 +109,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\msclr\marshal_atl.h";%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,6 +137,8 @@
   <ItemGroup>
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="MainFeature.h" />
+    <ClInclude Include="Music.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SUIN.h" />
@@ -137,12 +147,13 @@
   <ItemGroup>
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="MainFeature.cpp" />
+    <ClCompile Include="Music.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="SUIN.cpp" />
     <ClCompile Include="TimeSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Desktop\AnyConv.com__9259357_11zon.jpg" />
     <Image Include="..\..\..\..\Desktop\bitmap10.bmp" />
     <Image Include="small.ico" />
     <Image Include="source\1.bmp" />
@@ -183,10 +194,20 @@
     <Image Include="source\8_8.bmp" />
     <Image Include="source\9.bmp" />
     <Image Include="source\9_9.bmp" />
+    <Image Include="source\ING.bmp" />
+    <Image Include="source\START.bmp" />
+    <Image Include="source\WIN.bmp" />
     <Image Include="SUIN.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SUIN.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="source\mp31.bin" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="bgm2.mp3" />
+    <Media Include="source\sound\bgm1.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

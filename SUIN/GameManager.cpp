@@ -1,81 +1,66 @@
 #include "SUIN.h"
 #include "TimeSystem.h"
 #include "RenderSystem.h"
-#include "InputSystem.h"
-
+#include "InputSystem.h" 
 #include "GameManager.h"
-
+#include "Music.h"
+#include "MainFeature.h"
 #include <string>
+
+
+#define SCREEN_WIDTH 2400
+#define SCREEN_HEIGHT 1200
 
 namespace game
 {
-	struct Object
-	{
-		float x;
-		float y;
-		float size;
-		float speed;
-
-		COLORREF color;
-
-		void SetPos(float x, float y)
-		{
-			this->x = x;
-			this->y = y;
-		}
-
-		void Move(float x, float y)
-		{
-			this->x += x;
-			this->y += y;
-		}
-	};
-
-	Object player = { global::GetWinApp().GetWidth() / 2 ,global::GetWinApp().GetHeight() / 2, 10, 10, RGB(255, 255, 0) };
-
-	const int bludeCircleMax = 5000;
-	int blueCircleCount = 0;
-	Object blueCircles[bludeCircleMax];
 	HBITMAP hBackmap = nullptr;
+	int state = 1; //0:타이틀, 1: 게임진행 2: 종료
+	int ClickLimit=300, ClickTimer = ClickLimit; //클릭시간 제한
+	int StageLimit = 6000, StageTimer = StageLimit; //스테이지 시간제한
+	int Hint = 5; //힌트 개수
+	int Stage = 0; //현재 스테이지
+	int Score = 0; //정답 개수
+
+	Music* bgm = new Music("C:\\bgm1.mp3", false);
+	void StartInput(input::MouseState mouse) {
+		if ((mouse.x > 820 && mouse.x < 1550)&&(mouse.y > 600 && mouse.y < 800))  //시작버튼
+		{
+			state = 1;
+		}
+		//else if()//수인의 역사,,
+	}
+	void IngInput() {
+
+	}
+	void EndInput(input::MouseState mouse) {
+		state = 0;
+		/*
+		//나가기
+		if (mouse.left && (mouse.x > 0 && mouse.x < 1024) && (mouse.y > 0&& mouse.y < 768) && state == 0)  //시작버튼
+		{
+			state = 0;
+		}
+		//다시하기(1로)
+		if (mouse.left && (mouse.x > 1024 - 400 && mouse.x < 1024 - 200) && (mouse.y > 768 - 400 && mouse.y < 768 - 200) && state == 0)  //시작버튼
+		{
+			state = 0;
+		}
+		*/
+	}
+
 
 	void UpdatePlayer()
 	{
-		// 게임 로직은 여기에 추가
-		if (input::IsKeyDown('A'))
-		{
-			player.Move(-player.speed, 0);
-		}
-		else if (input::IsKeyDown('D'))
-		{
-			player.Move(player.speed, 0);
-		}
-		if (input::IsKeyDown('W'))
-		{
-			player.Move(0, -player.speed);
-		}
-		else if (input::IsKeyDown('S'))
-		{
-			player.Move(0, player.speed);
-		}
-	}
-
-	void UpdateBlueCircle()
-	{
-			const input::MouseState& mouse = input::GetMouseState();
-			const input::MouseState& prevmouse = input::GetPrevMouseState();
-
-			if (input::IsSame(mouse, prevmouse))
-			{
-				return;
-			}
-
-			if (blueCircleCount < bludeCircleMax && mouse.left)
-			{
-				blueCircles[blueCircleCount].SetPos(mouse.x, mouse.y);
-				blueCircles[blueCircleCount].color = RGB(0, 0, 255);
-				blueCircles[blueCircleCount].size = 10;
-				blueCircles[blueCircleCount].speed = 0;
-				blueCircleCount++;
+		const input::MouseState& mouse = input::GetMouseState();
+		const input::MouseState& prevmouse = input::GetPrevMouseState();
+			if (mouse.left && ClickTimer > ClickLimit) {
+				ClickTimer = 0;
+				if (state == 0) 
+					StartInput(mouse);
+				else if (state == 1) 
+					IngInput();
+				else 
+					EndInput(mouse);
 			}
 	}
 
@@ -91,6 +76,7 @@ namespace game
 		input::InitInput();
 		time::InitTime();
 		render::InitRender();
+		Music::Init();
 	}
 
 	void GameManager::Update()
@@ -102,34 +88,44 @@ namespace game
 		time::UpdateTime();
 
 		UpdatePlayer();
-		UpdateBlueCircle();
-
 		input::ResetInput();
+		ClickTimer += time::GetDeltaTime();
+		StageTimer += time::GetDeltaTime();
 
-	}
-
-	void GameManager::FixeUpdate()
-	{
-		static ULONGLONG elapsedTime;
-
-		elapsedTime += time::GetDeltaTime();
-
-		while (elapsedTime >= 20) //0.02초
-		{
-			++m_FixedUpdateCount;
-
-			elapsedTime -= 20;
-		}
 	}
 
 	void GameManager::Render()
 	{
 		render::BeginDraw();
-		DrawFPS();
-		DrawSomething();
-		DrawPlayer();
-		DrawBackGround();
+		if (state == 0)
+			Title();
+		else if (state == 1)
+			Ing();
+		else
+			End();
 		render::EndDraw();
+	}
+	void GameManager::Title()
+	{
+		//타이틀
+		DrawBackGround("source/START.bmp", 2390, 1162,0,0);
+		DrawInfo();
+
+	}
+	void GameManager::Ing()
+	{
+		//게임 진행
+		DrawBackGround("source/ING.bmp", 2390, 1162, 0,0);
+		//사진 띄우기
+		DrawBackGround("source/7.bmp", 855, 930, 330, 40);
+		DrawBackGround("source/7_7.bmp", 855, 930, 1200, 40);
+		DrawInfo();
+	}
+	void GameManager::End()
+	{
+		//엔딩
+		DrawBackGround("source/WIN.bmp", 2390, 1162 ,0,0);
+		DrawInfo();
 	}
 	void GameManager::Finalize()
 	{
@@ -138,11 +134,9 @@ namespace game
 	void GameManager::Run()
 	{
 		MSG msg;
-
+		bgm->play();
 		while (true)
 		{
-			//GetMessage 는 큐에 메시지가 있을 때까지 대기, 블러킹
-			//PeekMessage 는 메시지가 있으면 처리하고 아니면 넌블러킹
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 			{
 				if (msg.message == WM_QUIT) break;
@@ -162,13 +156,20 @@ namespace game
 			}
 			else
 			{
-				FixeUpdate();
-
+				//FixeUpdate();
+	
 				Update();
 
 				Render();
+
+				bgm->Update();
 			}
 		}
+		// Free Object
+		delete bgm;
+
+		// Release Fmod Llibrary
+		Music::Release();
 	}
 
 	GameManager* GameManager::GetInstance()
@@ -188,54 +189,16 @@ namespace game
 		}
 	}
 
-	void GameManager::DrawFPS()
+	void GameManager::DrawInfo()
 	{
-		static ULONGLONG elapsedTime;
-		static int UpdateCount;
-		static int FixedUpdateCount;
-
-		elapsedTime += time::GetDeltaTime();
-
-		if (elapsedTime >= 1000)
-		{
-			elapsedTime = 0;
-			;
-			UpdateCount = m_UpdateCount;
-			FixedUpdateCount = m_FixedUpdateCount;
-
-			m_UpdateCount = 0;
-			m_FixedUpdateCount = 0;
-		}
-
-		std::string str = "FPS: " + std::to_string(time::GetFrameRate());
-		str += "           Update " + std::to_string(UpdateCount);
-		str += "           FixedUpdate " + std::to_string(FixedUpdateCount);
-
-		render::DrawText(10, 10, str.c_str(), RGB(255, 0, 0));
+		//render::DrawText(10, 10, str.c_str(), RGB(255, 0, 0));
 	}
 
-	void GameManager::DrawPlayer()
+	void GameManager::DrawBackGround(const char* name,int width, int height, int x, int y)
 	{
-		render::DrawCircle(player.x, player.y, player.size, player.color);
+		hBackmap = render::LoadImages(name,width, height);
+		render::DrawBitmap(x, y, hBackmap);
+		render::ReleaseImage(hBackmap); 
 	}
 
-	void GameManager::DrawBackGround()
-	{
-		hBackmap = render::LoadImages("source/1.bmp");  // 함수 이름 수정
-		render::DrawBitmap(0, 0, hBackmap);
-		render::ReleaseImage(hBackmap);  // 이미지 메모리 해제
-	}
-
-	void GameManager::DrawSomething()
-	{
-
-			for (int i = 0; i < blueCircleCount; i++)
-			{
-				render::DrawCircle(blueCircles[i].x, blueCircles[i].y, blueCircles[i].size, blueCircles[i].color);
-			}
-
-			render::DrawLine(player.x - 50, player.y + 50, player.x + 50, player.y + 50, RGB(255, 0, 0));
-			render::DrawRect(player.x - 25, player.y - 25, 50, 50, RGB(255, 0, 255));
-
-	}
 }

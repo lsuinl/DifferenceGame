@@ -1,6 +1,6 @@
 #include "SUIN.h"
 #include "RenderSystem.h"
-
+#include <Windows.h>
 #pragma comment(lib, "msimg32.lib")
 
 namespace render
@@ -142,18 +142,24 @@ namespace render
         BITMAP bm;
         GetObject(hBitmap, sizeof(BITMAP), &bm);
 
-        ::BitBlt(backMemDC, x, y, bm.bmWidth, bm.bmHeight, bitmapMemDC, 0, 0, SRCCOPY);
+        HWND hWnd = global::GetWinApp().GetHWnd();
+        // 윈도우의 크기를 얻음
+        RECT clientRect;
+        GetClientRect(hWnd, &clientRect);
+        int windowWidth = clientRect.right - clientRect.left;
+        int windowHeight = clientRect.bottom - clientRect.top;
+
+        ::BitBlt(backMemDC, x, y, windowWidth, windowHeight, bitmapMemDC, 0, 0, SRCCOPY);
 
         SelectObject(bitmapMemDC, hOldBitmap);  // 이전 비트맵 복원
         DeleteObject(hBitmap);  // 비트맵 해제
         DeleteDC(bitmapMemDC);
+
     }
 
-    HBITMAP LoadImages(const char* path)
+    HBITMAP LoadImages(const char* path,int width,int height)
     {
-        //68-29=39 세로
-        //16가로
-        HBITMAP hBitmap = (HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, 1008, 729, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        HBITMAP hBitmap = (HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, width, height, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
         return hBitmap;
     }

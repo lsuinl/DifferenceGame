@@ -10,15 +10,16 @@ namespace global
 	{
 		return winApp;
 	}
+
 }
 
 constexpr int SCREEN_START_LEFT = 10;
 
 constexpr int SCREEN_START_TOP = 10;
 
-constexpr int SCREEN_WIDTH = 1024;
+constexpr int SCREEN_WIDTH = 2400;
 
-constexpr int SCREEN_HEIGHT = 768;
+constexpr int SCREEN_HEIGHT = 1200;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,

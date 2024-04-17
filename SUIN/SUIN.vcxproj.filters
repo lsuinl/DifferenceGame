@@ -34,6 +34,12 @@
     <ClInclude Include="resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="MainFeature.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SUIN.cpp">
@@ -49,6 +55,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="RenderSystem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFeature.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,9 +143,6 @@
     <Image Include="..\..\..\..\Desktop\bitmap10.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="..\..\..\..\Desktop\AnyConv.com__9259357_11zon.jpg">
-      <Filter>리소스 파일</Filter>
-    </Image>
     <Image Include="source\12_12.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
@@ -179,10 +188,32 @@
     <Image Include="source\19_19.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="source\ING.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\START.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\WIN.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SUIN.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="source\mp31.bin">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="source\sound\bgm1.mp3">
+      <Filter>소스 파일</Filter>
+    </Media>
+    <Media Include="bgm2.mp3">
+      <Filter>소스 파일</Filter>
+    </Media>
   </ItemGroup>
 </Project>

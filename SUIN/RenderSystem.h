@@ -24,7 +24,7 @@ namespace render
 
     void DrawBitmap(int x, int y, HBITMAP hBitmap);
 
-    HBITMAP LoadImages(const char* path);
+    HBITMAP LoadImages(const char* path, int width, int height);
 
     void ReleaseImage(HBITMAP hBitmap);
 }

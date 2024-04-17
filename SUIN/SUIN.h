@@ -31,14 +31,17 @@ public:
 	const int GetHeight() const { return height; }
 
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
+	HWND GetHWnd() const
+	{
+		return m_hWnd;
+	}
 private:
 
 	HINSTANCE m_hInstance = { 0 };  // HINSTANCE is a handle to an instance of a module.
 	HWND m_hWnd = { 0 };			// HWND is a handle to a window.
 
-	int width = 1024;
-	int height = 768;
+	int width = 2400;
+	int height = 1200;
 };
 
 namespace global
