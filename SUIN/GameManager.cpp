@@ -6,7 +6,7 @@
 #include "Music.h"
 #include "MainFeature.h"
 #include <string>
-
+#include <cstdlib>
 
 #define SCREEN_WIDTH 2400
 #define SCREEN_HEIGHT 1200
@@ -14,14 +14,18 @@
 namespace game
 {
 	HBITMAP hBackmap = nullptr;
-	int state = 1; //0:타이틀, 1: 게임진행 2: 종료
+	int state = 0; //0:타이틀, 1: 게임진행 2: 종료
 	int ClickLimit=300, ClickTimer = ClickLimit; //클릭시간 제한
+	int KeyLimit = 90, KeyTimer = KeyLimit; //키보드입력시간 제한
 	int StageLimit = 6000, StageTimer = StageLimit; //스테이지 시간제한
-	int Hint = 5; //힌트 개수
-	int Stage = 0; //현재 스테이지
+	int Stage = 1; //현재 스테이지
+	int StageScore = 0;//스테이지 스코어(5개 맞추기)
 	int Score = 0; //정답 개수
+	int image = 0;
+	int mousex, mousey;
+	std::string names="ME";
 
-	Music* bgm = new Music("C:\\bgm1.mp3", false);
+	Music* bgm = new Music("source/sound/bg.mp3", false);
 	void StartInput(input::MouseState mouse) {
 		if ((mouse.x > 820 && mouse.x < 1550)&&(mouse.y > 600 && mouse.y < 800))  //시작버튼
 		{
@@ -29,8 +33,18 @@ namespace game
 		}
 		//else if()//수인의 역사,,
 	}
-	void IngInput() {
-
+	void IngInput(input::MouseState mouse) {
+		mousex = mouse.x, mousey = mouse.y;
+		if (Feature::CheckCorrect(mouse.x, mouse.y)) {
+			Score++;
+			StageScore++;
+			if (StageScore == 5) {
+				image = 1 + std::rand() % 19;
+				StageScore = 0;
+				Feature::StageInit();
+				Feature::SetPos(image);
+			}
+		}
 	}
 	void EndInput(input::MouseState mouse) {
 		state = 0;
@@ -48,9 +62,17 @@ namespace game
 		*/
 	}
 
-
 	void UpdatePlayer()
 	{
+		//키보드 이벤트
+		if (state == 0 && KeyTimer > KeyLimit) {
+			KeyTimer = 0;
+			if (GetAsyncKeyState(VK_BACK) & 0x8000 && !names.empty())
+				names.pop_back();
+			else if(names.length()<10)
+				names += input::GetPressedKey();
+		}
+		//클릭 이벤트
 		const input::MouseState& mouse = input::GetMouseState();
 		const input::MouseState& prevmouse = input::GetPrevMouseState();
 			if (mouse.left && ClickTimer > ClickLimit) {
@@ -58,12 +80,11 @@ namespace game
 				if (state == 0) 
 					StartInput(mouse);
 				else if (state == 1) 
-					IngInput();
+					IngInput(mouse);
 				else 
 					EndInput(mouse);
 			}
 	}
-
 	GameManager* GameManager::instance = nullptr;
 	GameManager::GameManager()
 	{
@@ -73,6 +94,8 @@ namespace game
 	}
 	void GameManager::Initialize()
 	{
+		image = 1 + std::rand() % 19;
+		Feature::SetPos(image);
 		input::InitInput();
 		time::InitTime();
 		render::InitRender();
@@ -81,17 +104,15 @@ namespace game
 
 	void GameManager::Update()
 	{
+		ULONGLONG delta = time::GetDeltaTime();
 		++m_UpdateCount;
-
 		input::UpdateMouse();
-
 		time::UpdateTime();
-
 		UpdatePlayer();
 		input::ResetInput();
-		ClickTimer += time::GetDeltaTime();
-		StageTimer += time::GetDeltaTime();
-
+		KeyTimer += delta;
+		ClickTimer += delta;
+		StageTimer += delta;
 	}
 
 	void GameManager::Render()
@@ -105,27 +126,25 @@ namespace game
 			End();
 		render::EndDraw();
 	}
-	void GameManager::Title()
+	void GameManager::Title()//타이틀
 	{
-		//타이틀
-		DrawBackGround("source/START.bmp", 2390, 1162,0,0);
-		DrawInfo();
-
+		hBackmap= render::DrawBackGround("source/START.bmp", 2390, 1162,0,0,false);
+		DrawStartInfo();
 	}
-	void GameManager::Ing()
+	void GameManager::Ing()	//게임 진행
 	{
-		//게임 진행
-		DrawBackGround("source/ING.bmp", 2390, 1162, 0,0);
-		//사진 띄우기
-		DrawBackGround("source/7.bmp", 855, 930, 330, 40);
-		DrawBackGround("source/7_7.bmp", 855, 930, 1200, 40);
-		DrawInfo();
+		hBackmap = render::DrawBackGround("source/ING.bmp", 2390, 1162, 0,0, false);
+		std::string filename = "source/" + std::to_string(image) + ".bmp";
+		std::string filenames = "source/" + std::to_string(image) + "_"+ std::to_string(image) +".bmp";
+		hBackmap = render::DrawBackGround(filename.c_str() , 855, 930, 330, 40, false);
+		hBackmap = render::DrawBackGround(filenames.c_str() , 855, 930, 1200, 40, false);
+		Feature::DrawCorrect();
+		DrawIngInfo();
 	}
-	void GameManager::End()
+	void GameManager::End()//엔딩
 	{
-		//엔딩
-		DrawBackGround("source/WIN.bmp", 2390, 1162 ,0,0);
-		DrawInfo();
+		hBackmap = render::DrawBackGround("source/WIN.bmp", 2390, 1162 ,0,0, false);
+		DrawIngInfo();
 	}
 	void GameManager::Finalize()
 	{
@@ -140,35 +159,21 @@ namespace game
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 			{
 				if (msg.message == WM_QUIT) break;
-
 				if (msg.message == WM_KEYDOWN)
-				{
 					input::KeyDown(msg.wParam);
-				}
 				else if (msg.message == WM_KEYUP)
-				{
 					input::KeyUp(msg.wParam);
-				}
 				else
-				{
 					DispatchMessage(&msg);
-				}
 			}
 			else
 			{
-				//FixeUpdate();
-	
 				Update();
-
 				Render();
-
 				bgm->Update();
 			}
 		}
-		// Free Object
 		delete bgm;
-
-		// Release Fmod Llibrary
 		Music::Release();
 	}
 
@@ -189,16 +194,22 @@ namespace game
 		}
 	}
 
-	void GameManager::DrawInfo()
-	{
-		//render::DrawText(10, 10, str.c_str(), RGB(255, 0, 0));
+	void GameManager::DrawStartInfo() {
+		render::DrawText(1200-(names.length() * 32), 200, names.c_str(), RGB(253, 208, 0), 100);
+		render::DrawText(850, 300,"틀린그림찾기", RGB(253, 255, 255), 150);
+
+		render::DrawText(2240 - (names.length() * 10), 680, names.c_str(), RGB(253, 208, 0), 30);
+	}
+	void GameManager::DrawIngInfo(){
+		std::string scores;
+		if (Score < 10)
+			scores = "0"+std::to_string(Score);
+		else
+			scores = std::to_string(Score);
+
+		render::DrawText(145- (names.length() * 10), 40, names.c_str(), RGB(253, 208, 0), 30);
+		render::DrawText(90, 60, scores.c_str(), RGB(253, 208, 0),100);
 	}
 
-	void GameManager::DrawBackGround(const char* name,int width, int height, int x, int y)
-	{
-		hBackmap = render::LoadImages(name,width, height);
-		render::DrawBitmap(x, y, hBackmap);
-		render::ReleaseImage(hBackmap); 
-	}
 
 }

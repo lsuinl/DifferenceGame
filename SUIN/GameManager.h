@@ -13,7 +13,6 @@ namespace game
 
 		void Update();
 
-		//void FixeUpdate();
 		void Render();
 
 		void Finalize();
@@ -28,8 +27,8 @@ namespace game
 		static void DestroyInstance();
 
 	private:
-		void DrawBackGround(const char* name, int width, int height,int x, int y);
-		void DrawInfo();
+		void DrawStartInfo();
+		void DrawIngInfo();
 		void DrawSomething();
 		void StartInput();
 		void IngInput();

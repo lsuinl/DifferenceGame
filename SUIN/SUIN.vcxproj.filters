@@ -40,6 +40,9 @@
     <ClInclude Include="Music.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="ScreenManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SUIN.cpp">
@@ -61,6 +64,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Music.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -140,9 +146,6 @@
     <Image Include="source\12.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="..\..\..\..\Desktop\bitmap10.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
     <Image Include="source\12_12.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
@@ -197,6 +200,9 @@
     <Image Include="source\WIN.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="source\correct.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SUIN.rc">
@@ -215,5 +221,10 @@
     <Media Include="bgm2.mp3">
       <Filter>소스 파일</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="source\font\BlackHanSans-Regular.ttf">
+      <Filter>리소스 파일</Filter>
+    </Font>
   </ItemGroup>
 </Project>

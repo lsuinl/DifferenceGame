@@ -1,6 +1,5 @@
 #include "Music.h"
 #include "SUIN.h"
-
 FMOD_SYSTEM* Music::g_sound_system;
 
 Music::Music(const char* path, bool loop) {
@@ -21,9 +20,8 @@ Music::~Music() {
 
 
 int Music::Init() {
-    FMOD_System_Create(&g_sound_system, FMOD_INIT_NORMAL | FMOD_INIT_STREAM_FROM_UPDATE);
+    FMOD_System_Create(&g_sound_system, FMOD_VERSION);
     FMOD_System_Init(g_sound_system, 32, FMOD_INIT_NORMAL, NULL);
-
 
     return 0;
 }

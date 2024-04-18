@@ -73,7 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x64;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -141,6 +141,7 @@
     <ClInclude Include="Music.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ScreenManager.h" />
     <ClInclude Include="SUIN.h" />
     <ClInclude Include="TimeSystem.h" />
   </ItemGroup>
@@ -150,11 +151,11 @@
     <ClCompile Include="MainFeature.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="ScreenManager.cpp" />
     <ClCompile Include="SUIN.cpp" />
     <ClCompile Include="TimeSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Desktop\bitmap10.bmp" />
     <Image Include="small.ico" />
     <Image Include="source\1.bmp" />
     <Image Include="source\10.bmp" />
@@ -194,6 +195,7 @@
     <Image Include="source\8_8.bmp" />
     <Image Include="source\9.bmp" />
     <Image Include="source\9_9.bmp" />
+    <Image Include="source\correct.bmp" />
     <Image Include="source\ING.bmp" />
     <Image Include="source\START.bmp" />
     <Image Include="source\WIN.bmp" />
@@ -208,6 +210,9 @@
   <ItemGroup>
     <Media Include="bgm2.mp3" />
     <Media Include="source\sound\bgm1.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="source\font\BlackHanSans-Regular.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
