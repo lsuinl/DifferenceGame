@@ -1,6 +1,6 @@
 #pragma once
 
-namespace time
+namespace ts
 {
 	void InitTime();
 

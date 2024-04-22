@@ -138,6 +138,7 @@ namespace render
         SetBkMode(backMemDC, TRANSPARENT); // 배경을 투명으로 설정
         TextOutA(backMemDC, x, y, text, strlen(text));
         SelectObject(backMemDC, oldFont);
+        SelectObject(backMemDC, oldFont);
 
         DeleteObject(currentFont);
     }

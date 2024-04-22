@@ -1,38 +1,65 @@
 #pragma once
-#ifndef _CSOUND_H_
-#define _CSOUND_H_
 
-#include <fmod.h>
+#include <string>
 
-#define SOUND_MAX 1.0f
-#define SOUND_MIN 0.0f
-#define SOUND_DEFAULT 0.5f
-#define SOUND_WEIGHT 0.1f
-
-class Music {
-private:
-    static FMOD_SYSTEM* g_sound_system;
-
-    FMOD_SOUND* m_sound;
-    FMOD_CHANNEL* m_channel;
-
-    float m_volume;
-    FMOD_BOOL m_bool;
-public:
-    Music(const char* path, bool loop);
-    ~Music();
-
-    static int Init();
-    static int Release();
-
-    int play();
-    int pause();
-    int resume();
-    int stop();
-    int volumeUp();
-    int volumeDown();
-
-    int Update();
-};
-
+// FMOD
+#ifndef _WIN64
+#include "fmod.hpp"
+#pragma comment (lib, "fmod_vc.lib")
+using namespace FMOD;
 #endif
+#ifdef _WIN64
+#include "fmod.hpp"
+#pragma comment (lib, "fmod_vc.lib")
+using namespace FMOD;
+#endif
+
+namespace Music
+{
+    enum class eSoundChannel
+    {
+        BGM,
+        Effect,
+        Size
+    };
+
+    enum class eSoundList
+    {
+        StartBGM1,
+        StartBGM2,
+        StartBGM3,
+        correct,
+        wrong,
+        perfect,
+        defect,
+        hint,
+        Size
+    };
+
+    class SoundManager final
+    {
+    public:
+        static SoundManager* GetInstance();
+        static void DestroyInstance();
+
+        void LoadMusic(eSoundList list, bool loopcheck, const char* music);
+
+        void PlayMusic(eSoundList list, eSoundChannel channel);
+        void StopMusic(eSoundChannel channel);
+
+        void SetVolume(float volume);
+
+    private:
+        SoundManager();
+        ~SoundManager();
+
+    private:
+        static SoundManager* mInstance;
+
+        FMOD::System* mSystem;
+        FMOD::Channel* mChannel[static_cast<int>(eSoundChannel::Size)];
+        FMOD::Sound* mSoundList[static_cast<int>(eSoundList::Size)];
+        float mVolume;
+    };
+
+}

@@ -21,8 +21,7 @@ namespace input
         }
     }
 
-    void KeyDown(unsigned int key)
-    {
+    void KeyDown(unsigned int key)    {
         isKeyDown[key] = true;
         isKey[key] = true;
     }

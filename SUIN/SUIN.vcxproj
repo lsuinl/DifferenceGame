@@ -196,7 +196,10 @@
     <Image Include="source\9.bmp" />
     <Image Include="source\9_9.bmp" />
     <Image Include="source\correct.bmp" />
+    <Image Include="source\defect.bmp" />
+    <Image Include="source\hint.bmp" />
     <Image Include="source\ING.bmp" />
+    <Image Include="source\perfect.bmp" />
     <Image Include="source\START.bmp" />
     <Image Include="source\WIN.bmp" />
     <Image Include="SUIN.ico" />

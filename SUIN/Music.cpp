@@ -1,90 +1,74 @@
 #include "Music.h"
 #include "SUIN.h"
-FMOD_SYSTEM* Music::g_sound_system;
 
-Music::Music(const char* path, bool loop) {
-    if (loop) {
-        FMOD_System_CreateSound(g_sound_system, path, FMOD_LOOP_NORMAL, 0, &m_sound);
-    }
-    else {
-        FMOD_System_CreateSound(g_sound_system, path, FMOD_DEFAULT, 0, &m_sound);
-    }
+namespace Music
+{
+    SoundManager* SoundManager::mInstance = nullptr;
 
-    m_channel = nullptr;
-    m_volume = SOUND_DEFAULT;
-}
+    SoundManager* SoundManager::GetInstance()
+    {
+        if (mInstance == nullptr)
+        {
+            mInstance = new SoundManager();
+        }
 
-Music::~Music() {
-    FMOD_Sound_Release(m_sound);
-}
-
-
-int Music::Init() {
-    FMOD_System_Create(&g_sound_system, FMOD_VERSION);
-    FMOD_System_Init(g_sound_system, 32, FMOD_INIT_NORMAL, NULL);
-
-    return 0;
-}
-
-int Music::Release() {
-    FMOD_System_Close(g_sound_system);
-    FMOD_System_Release(g_sound_system);
-
-    return 0;
-}
-
-
-int Music::play() {
-    FMOD_System_PlaySound(g_sound_system, m_sound, NULL, false, &m_channel);
-
-    return 0;
-}
-
-int Music::pause() {
-    FMOD_Channel_SetPaused(m_channel, true);
-
-    return 0;
-}
-
-int Music::resume() {
-    FMOD_Channel_SetPaused(m_channel, false);
-
-    return 0;
-}
-
-int Music::stop() {
-    FMOD_Channel_Stop(m_channel);
-
-    return 0;
-}
-
-int Music::volumeUp() {
-    if (m_volume < SOUND_MAX) {
-        m_volume += SOUND_WEIGHT;
+        return mInstance;
     }
 
-    FMOD_Channel_SetVolume(m_channel, m_volume);
-
-    return 0;
-}
-
-int Music::volumeDown() {
-    if (m_volume > SOUND_MIN) {
-        m_volume -= SOUND_WEIGHT;
+    void SoundManager::DestroyInstance()
+    {
+        delete mInstance;
+        mInstance = nullptr;
     }
 
-    FMOD_Channel_SetVolume(m_channel, m_volume);
+    void SoundManager::LoadMusic(eSoundList soundlist, bool loopcheck, const char* music)
+    {
+        System_Create(&mSystem);
+        mSystem->init(2, FMOD_INIT_NORMAL, 0);
 
-    return 0;
-}
+        if (loopcheck)
+        {
+            mSystem->createSound(music, FMOD_LOOP_NORMAL, 0, &mSoundList[static_cast<int>(soundlist)]);
+        }
+        else
+        {
+            mSystem->createSound(music, FMOD_LOOP_OFF, 0, &mSoundList[static_cast<int>(soundlist)]);
+        }
 
-
-int Music::Update() {
-    FMOD_Channel_IsPlaying(m_channel, &m_bool);
-
-    if (m_bool) {
-        FMOD_System_Update(g_sound_system);
     }
 
-    return 0;
-}
+    void SoundManager::PlayMusic(eSoundList soundlist, eSoundChannel channel)
+    {
+        mChannel[static_cast<int>(channel)]->stop();
+        mSystem->playSound(mSoundList[static_cast<int>(soundlist)], NULL, 0, &mChannel[static_cast<int>(channel)]);
+        mChannel[static_cast<int>(channel)]->setVolume(mVolume);
+    }
+
+    void SoundManager::StopMusic(eSoundChannel channel)
+    {
+        mChannel[static_cast<int>(channel)]->stop();
+    }
+
+    void SoundManager::SetVolume(float volume)
+    {
+        mVolume = volume;
+        for (unsigned int i = 0; i < static_cast<unsigned int>(eSoundChannel::Size); ++i)
+        {
+            mChannel[i]->setVolume(mVolume);
+        }
+    }
+
+    SoundManager::SoundManager()
+        : mSystem()
+        , mChannel{}
+        , mSoundList{}
+        , mVolume(0.5f)
+    {
+    }
+
+    SoundManager::~SoundManager()
+    {
+        mSystem->release();
+        mSystem->close();
+    }
+};

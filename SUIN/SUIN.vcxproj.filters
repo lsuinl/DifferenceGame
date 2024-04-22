@@ -203,6 +203,15 @@
     <Image Include="source\correct.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="source\hint.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\defect.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="source\perfect.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SUIN.rc">

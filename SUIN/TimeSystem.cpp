@@ -2,7 +2,7 @@
 #include "TimeSystem.h"
 #include <cmath>
 
-namespace time
+namespace ts
 {
 	ULONGLONG previousTime;
 	ULONGLONG currentTime;
@@ -28,9 +28,7 @@ namespace time
 
 		return ceil(((1000.0f / deltaTime) * 1000) / 1000);
 	}
-
 	const ULONGLONG GetDeltaTime() { return deltaTime; }
-
 }
 
 namespace high_resolution_time

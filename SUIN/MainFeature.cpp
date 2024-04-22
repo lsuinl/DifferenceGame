@@ -2,12 +2,105 @@
 #include "SUIN.h"
 #include "RenderSystem.h"
 #include "GameManager.h"
+#include "TimeSystem.h"
+#include "Music.h"
+#include <string>
+struct rank {
+	const char* name;
+	int score;
+};
 
 namespace Feature
 {
 	bool rightnum[5] = { 0,0,0,0,0 };
-	int hint = 5;
+	int hintRe = 5;
 	int xpos[5], ypos[5], cx[5], cy[5];
+
+	//logo: 성공, 실패 로고, Animation: 화면전환애니메이션
+	bool Animation = false, perfect;
+	int LogoLimit = 1000, AnimationLimit = 2000, AnimationTime = 0; 
+
+	//힌트
+	bool hint = false;
+	int hintLimit = 5000,hintTime=0, hintIndex=-1;
+	
+	//랭킹
+	rank* ranks[6] = {
+	new rank{"Player1", 15},
+	new rank{"Player2", 14},
+	new rank{"Player3", 13},
+	new rank{"Player4", 12},
+	new rank{"Player5", 11},
+	new rank{"Player6", 10}
+	}; 
+
+	void InitFeature() {
+		 hintRe = 5;
+		 hint = false;
+		 Animation = false;
+		 AnimationTime = 0;
+		 hintTime = 0;
+	}
+	void Ranking(const char* name, int score) {
+		int check = 6;
+		for (int i = 0; i < 6; i++) {
+			if (ranks[i]->score <= score) {
+				check = i;
+				break;  // 이미 정렬된 배열에서 해당 조건을 만족하는 위치를 찾았으므로 루프를 종료합니다.
+			}
+		}
+		if (check < 6) {
+			for (int i = 5; i > check; i--) {
+				ranks[i] = ranks[i - 1];
+			}
+		}
+		ranks[check] = new rank{ name, score };  // 새로운 Rank 객체를 동적으로 할당하여 저장합니다.
+	}
+	void DrawRanking() {
+		render::DrawText(1000, 345, ranks[0]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1300, 345, std::to_string(ranks[0]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1000, 390, ranks[1]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1300, 390, std::to_string(ranks[1]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1000, 435, ranks[2]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1300, 435, std::to_string(ranks[2]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1000, 480, ranks[3]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1300, 480, std::to_string(ranks[3]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1000, 525, ranks[4]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1300, 525, std::to_string(ranks[4]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1000, 570, ranks[5]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1300, 570, std::to_string(ranks[5]->score).c_str(), RGB(255, 255, 255), 30);
+	}
+
+	void FeatureInit() {
+		ts::InitTime();
+	}
+	void SetAnimation(bool right) {
+		perfect = right;
+		Animation = true;
+	}
+	bool GetAnimation() {
+		return Animation;
+	}
+	void DrawAnimation(const char* pic1, const char* pic2) {
+		if (Animation) {
+			ts::UpdateTime();
+			AnimationTime += ts::GetDeltaTime();
+			if (AnimationTime < LogoLimit) {//로고 띄우기
+				if(perfect)
+					render::DrawBackGround("source/perfect.bmp", 1300, 562, 500, 300, true);
+				else 
+					render::DrawBackGround("source/defect.bmp", 1300, 562, 500, 300, true);
+			}
+			else if(AnimationTime < AnimationLimit) {//애니메이션 젼환
+				render::DrawBackGround(pic1, 855, 930 - ((AnimationLimit - AnimationTime)), 330, 40, false);
+				render::DrawBackGround(pic2, 855, 930 - ((AnimationLimit - AnimationTime)), 1200, 40, false);
+			}
+			else if(AnimationTime >= AnimationLimit) { //전환 종료
+				AnimationTime = 0;
+				Animation = false;
+			}
+		}
+	}
 
 	void DrawCorrect( ) {
 		for (int i = 0; i < 5; i++) {
@@ -30,8 +123,32 @@ namespace Feature
 		for(int i=0;i<5;i++)
 			rightnum[i] = false;
 	}
-	void Hint() {
-
+	void SetHint() {
+		if (hintRe > 0) {
+			for (int i = 0; i < 5; i++) {
+				if (!rightnum[i]) {
+					hintIndex = i;
+					break;
+				}
+			}
+			hint = true;
+			hintRe--;
+		}
+	}
+	void DrawHint() {
+		if (hint) {
+			if(hintTime < hintLimit)
+				hintTime += ts::GetDeltaTime();
+			else {
+				hintTime = 0;
+				hint = false;
+			}
+			if (!rightnum[hintIndex]) { //맞추면 안보여줌
+				render::DrawBackGround("source/hint.bmp", cx[hintIndex], cy[hintIndex], xpos[hintIndex], ypos[hintIndex], true);
+				render::DrawBackGround("source/hint.bmp", cx[hintIndex], cy[hintIndex], xpos[hintIndex] + 870, ypos[hintIndex], true);
+			}
+		}
+		render::DrawText(850, 985, std::to_string(hintRe).c_str(), RGB(253, 208, 0), 50);
 	}
 	void SetPos(int num) {
 		if (num == 1) {//1번
