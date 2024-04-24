@@ -25,22 +25,18 @@ namespace Music
 
     enum class eSoundList
     {
-        StartBGM1,
-        StartBGM2,
-        StartBGM3,
-        correct1,
-        correct2,
-        correct3,
-        correct4,
-        correct5,
+        StartBGM,
+        correct,
         wrong,
-        win,
         hint,
+        win,
         start,
         success,
         fail,
         Size,
     };
+    class SoundManager;  // 클래스 전방 선언
+    extern SoundManager* soundManager;  // extern을 사용하여 외부에서 접근 가능하도록 선언
 
     class SoundManager final
     {

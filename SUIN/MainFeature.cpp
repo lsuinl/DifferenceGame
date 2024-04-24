@@ -1,7 +1,6 @@
 #include "MainFeature.h"
 #include "SUIN.h"
 #include "RenderSystem.h"
-#include "GameManager.h"
 #include "TimeSystem.h"
 #include "Music.h"
 #include "util.h"
@@ -12,7 +11,6 @@ struct rank {
 
 namespace Feature
 {
-		 
 	bool rightnum[5] = { 0,0,0,0,0 };
 	int hintRe = 5;
 	int xpos[5], ypos[5], cx[5], cy[5];
@@ -20,7 +18,9 @@ namespace Feature
 	//logo: 성공, 실패 로고, Animation: 화면전환애니메이션
 	bool Animation = false, perfect;
 	int LogoLimit = 1000, AnimationLimit = 2000, AnimationTime = 0; 
-
+	//시작 애니메이션 
+	bool StartAnimation = false;
+	int StartAnimationLimit = 2500, StartAnimationTime = 0;
 	//힌트
 	bool hint = false;
 	int hintLimit = 5000,hintTime=0, hintIndex=-1;
@@ -57,20 +57,37 @@ namespace Feature
 		}
 		ranks[check] = new rank{ name, score };  // 새로운 Rank 객체를 동적으로 할당하여 저장합니다.
 	}
-	void DrawRanking() {
-		render::DrawText(1000, 345, ranks[0]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 345, util::IntToChar(ranks[0]->score), RGB(255, 255, 255), 30);
-		render::DrawText(1000, 390, ranks[1]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 390, util::IntToChar(ranks[1]->score), RGB(255, 255, 255), 30);
-		render::DrawText(1000, 435, ranks[2]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 435, util::IntToChar(ranks[2]->score), RGB(255, 255, 255), 30);
-		render::DrawText(1000, 480, ranks[3]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 480, util::IntToChar(ranks[3]->score), RGB(255, 255, 255), 30);
-		render::DrawText(1000, 525, ranks[4]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 525, util::IntToChar(ranks[4]->score), RGB(255, 255, 255), 30);
-		render::DrawText(1000, 570, ranks[5]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 570, util::IntToChar(ranks[5]->score), RGB(255, 255, 255), 30);
+	void DrawRankingInfo() {
+		render::DrawText(110 - (util::CheckSize(ranks[0]->name)), 40, ranks[0]->name, RGB(255, 255, 255), 30);
+		render::DrawText(90, 60, util::IntToChar(ranks[0]->score), RGB(253, 208, 0), 100);
+		render::DrawText(110 - (util::CheckSize(ranks[1]->name)), 360, ranks[1]->name, RGB(255, 255, 255), 30);
+		render::DrawText(90, 380, util::IntToChar(ranks[1]->score), RGB(253, 208, 0), 100);
+		render::DrawText(110 - (util::CheckSize(ranks[2]->name)), 670, ranks[2]->name, RGB(255, 255, 255), 30);
+		render::DrawText(90, 690, util::IntToChar(ranks[2]->score), RGB(253, 208, 0), 100);
+		render::DrawText(2245 - (util::CheckSize(ranks[3]->name)), 40, ranks[3]->name, RGB(255, 255, 255), 30);
+		render::DrawText(2155, 60, util::IntToChar(ranks[3]->score), RGB(253, 208, 0), 100);
+		render::DrawText(2245 - (util::CheckSize(ranks[4]->name)), 360, ranks[4]->name, RGB(255, 255, 255), 30);
+		render::DrawText(2155, 380, util::IntToChar(ranks[4]->score), RGB(253, 208, 0), 100);
+		render::DrawText(2245 - (util::CheckSize(ranks[5]->name)), 670, ranks[5]->name, RGB(255, 255, 255), 30);
+		render::DrawText(2155, 690, util::IntToChar(ranks[5]->score), RGB(253, 208, 0), 100);
 	}
+
+	void DrawRanking() {
+		render::DrawText(900, 315, ranks[0]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1220, 315, util::IntToChar(ranks[0]->score), RGB(255, 255, 255), 30);
+		render::DrawText(900, 357, ranks[1]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1220, 357, util::IntToChar(ranks[1]->score), RGB(255, 255, 255), 30);
+		render::DrawText(900, 399, ranks[2]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1220, 399, util::IntToChar(ranks[2]->score), RGB(255, 255, 255), 30);
+		render::DrawText(900, 441, ranks[3]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1220, 441, util::IntToChar(ranks[3]->score), RGB(255, 255, 255), 30);
+		render::DrawText(900, 488, ranks[4]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1220, 488, util::IntToChar(ranks[4]->score), RGB(255, 255, 255), 30);
+		render::DrawText(900, 530, ranks[5]->name, RGB(255, 255, 255), 30);
+		render::DrawText(1220, 530, util::IntToChar(ranks[5]->score), RGB(255, 255, 255), 30);
+	}
+
+
 
 	void FeatureInit() {
 		ts::InitTime();
@@ -102,7 +119,27 @@ namespace Feature
 			}
 		}
 	}
-
+	void SetStartAnimation() {
+		StartAnimation = true;
+	}
+	bool GetStartAnimation() {
+		return StartAnimation;
+	}
+	void DrawStartAnimation() {
+		if (StartAnimation) {
+			StartAnimationTime += ts::GetDeltaTime();
+			if (StartAnimationTime < StartAnimationLimit-(2390/3)) {
+				render::DrawBackGround("source//START.bmp", 2390, 1162, 0, 0, false);
+			}
+			else if (StartAnimationTime < StartAnimationLimit) {//애니메이션 젼환
+				render::DrawBackGround("source//START.bmp", (StartAnimationLimit - StartAnimationTime)*3, 1162,0, 0, false);
+			}
+			else if (StartAnimationTime >= StartAnimationLimit) { //전환 종료
+				StartAnimationTime = 0;
+				StartAnimation = false;
+			}
+		}
+	}
 	void DrawCorrect( ) {
 		for (int i = 0; i < 5; i++) {
 			if(rightnum[i] == true) {
@@ -112,12 +149,16 @@ namespace Feature
 		}
 	}
 	bool CheckCorrect(int x, int y) {
+		//범위안 먼저 체크
 		for (int i = 0; i < 5; i++) {
 			if (((xpos[i]<x && xpos[i] + cx[i]>x) || (xpos[i] + 870 < x && xpos[i] + 870 + cx[i] > x)) && ypos[i]<y && ypos[i] + cy[i]>y && !rightnum[i]) {
+				Music::soundManager->PlayMusic(Music::eSoundList::correct, Music::eSoundChannel::Effect); 
 				rightnum[i] = true;
 				return true;
 			}
 		}
+		//틀렸을 때,
+		Music::soundManager->PlayMusic(Music::eSoundList::wrong, Music::eSoundChannel::Effect);
 		return false;
 	}
 	void StageInit() {
@@ -126,6 +167,7 @@ namespace Feature
 	}
 	void SetHint() {
 		if (hintRe > 0) {
+			Music::soundManager->PlayMusic(Music::eSoundList::hint, Music::eSoundChannel::Effect);
 			for (int i = 0; i < 5; i++) {
 				if (!rightnum[i]) {
 					hintIndex = i;

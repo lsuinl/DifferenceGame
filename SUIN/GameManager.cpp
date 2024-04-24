@@ -13,8 +13,6 @@
 
 namespace game
 {
-	Music::SoundManager* soundManager = Music::SoundManager::GetInstance();
-
 	void UpdatePlayer()
 	{
 		//키보드 이벤트
@@ -53,24 +51,26 @@ namespace game
 		//이름초기화
 		for (int i = 0; i < 11; i++)
 			screen::names[i] = '\0';
+		Music::soundManager->GetInstance();
 		// SoundManager를 사용하여 음악 로드
-		soundManager->LoadMusic(Music::eSoundList::StartBGM1, false, "source//sound//bgm1.mp3");//배경음악
-		soundManager->LoadMusic(Music::eSoundList::StartBGM2, false, "source//sound//bgm2.mp3");
-		soundManager->LoadMusic(Music::eSoundList::StartBGM3, false, "source//sound//bgm3.mp3");
-		soundManager->LoadMusic(Music::eSoundList::correct1, false, "source//sound//correct1.mp3");//정답효과음
-		soundManager->LoadMusic(Music::eSoundList::correct2, false, "source//sound//correct2.mp3");
-		soundManager->LoadMusic(Music::eSoundList::correct3, false, "source//sound//correct3.mp3");
-		soundManager->LoadMusic(Music::eSoundList::correct4, false, "source//sound//correct4.mp3");
-		soundManager->LoadMusic(Music::eSoundList::correct5, false, "source//sound//correct5.mp3");
-		soundManager->LoadMusic(Music::eSoundList::wrong, false, "source//sound//wrong.mp3");//오답효과음
-		soundManager->LoadMusic(Music::eSoundList::win, false, "source//sound//Win.mp3");//엔딩효과음
-		soundManager->LoadMusic(Music::eSoundList::hint, false, "source//sound//hint.mp3");//힌트 효과음
-		soundManager->LoadMusic(Music::eSoundList::start, false, "source//sound//start.mp3");//시작 효과음
-		soundManager->LoadMusic(Music::eSoundList::success, false, "source//sound//success.mp3");//스테이지 성공 효과음
-		soundManager->LoadMusic(Music::eSoundList::fail, false, "source//sound//fail.mp3");//스테이지 실패 효과음
-
+		Music::soundManager->LoadMusic(Music::eSoundList::StartBGM, false, "source//sound//bgm1.mp3");//배경음악
+		//Music::soundManager->LoadMusic(Music::eSoundList::StartBGM2, false, "source//sound//bgm2.mp3");
+		//Music::soundManager->LoadMusic(Music::eSoundList::StartBGM3, false, "source//sound//bgm3.mp3");
+		Music::soundManager->LoadMusic(Music::eSoundList::correct, false, "source//sound//correct1.mp3");//정답효과음
+		//Music::soundManager->LoadMusic(Music::eSoundList::correct2, false, "source//sound//correct2.mp3");
+		//Music::soundManager->LoadMusic(Music::eSoundList::correct3, false, "source//sound//correct3.mp3");
+		//Music::soundManager->LoadMusic(Music::eSoundList::correct4, false, "source//sound//correct4.mp3");
+		//Music::soundManager->LoadMusic(Music::eSoundList::correct5, false, "source//sound//correct5.mp3");
+		Music::soundManager->LoadMusic(Music::eSoundList::wrong, false, "source//sound//wrong.mp3");//오답효과음
+		Music::soundManager->LoadMusic(Music::eSoundList::hint, false, "source//sound//hint.mp3");//힌트 효과음
+		Music::soundManager->LoadMusic(Music::eSoundList::win, false, "source//sound//Win.mp3");//엔딩효과음
+		Music::soundManager->LoadMusic(Music::eSoundList::start, false, "source//sound//start.mp3");//시작 효과음
+		Music::soundManager->LoadMusic(Music::eSoundList::success, false, "source//sound//success.mp3");//스테이지 성공 효과음
+		Music::soundManager->LoadMusic(Music::eSoundList::fail, false, "source//sound//fail.mp3");//실패
+	
+		
 		// SoundManager 초기화
-		soundManager->SetVolume(0.5f);
+		Music::soundManager->SetVolume(0.5f);
 	}
 	void GameManager::Update()
 	{
@@ -101,7 +101,7 @@ namespace game
 	void GameManager::Run()
 	{
 		MSG msg;
-		soundManager->PlayMusic(Music::eSoundList::StartBGM2, Music::eSoundChannel::BGM);// SoundManager를 사용하여 음악 재생
+		Music::soundManager->PlayMusic(Music::eSoundList::StartBGM, Music::eSoundChannel::BGM);// SoundManager를 사용하여 음악 재생
 		while (true)
 		{
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -120,7 +120,7 @@ namespace game
 				Render();
 			}
 		}
-		soundManager->StopMusic(Music::eSoundChannel::BGM);// SoundManager를 사용하여 음악 중지 및 해제
+		Music::soundManager->StopMusic(Music::eSoundChannel::BGM);// SoundManager를 사용하여 음악 중지 및 해제
 	}
 	GameManager* GameManager::GetInstance()
 	{

@@ -4,14 +4,15 @@
 #include "MainFeature.h"
 #include "InputSystem.h"
 #include "Music.h"
+#include "GameManager.h"
 #include "util.h"
-#include <cstdlib>
+#include <random>
 namespace screen
 {
-	 int state = 0; //0:타이틀, 1: 게임진행 2: 종료
+	 int state = 2; //0:타이틀, 1: 게임진행 2: 종료
 	 int ClickLimit = 300, ClickTimer = ClickLimit; //클릭시간 제한
 	 int KeyLimit = 90, KeyTimer = KeyLimit; //키보드입력시간 제한
-	 int StageLimit = 5000, StageTimer = 0; //스테이지 시간제한
+	 int StageLimit = 50000, StageTimer = 0; //스테이지 시간제한
 	 int Stage = 0; //현재 스테이지
 	 int StageScore = 0;//스테이지 스코어(5개 맞추기)
 	 int Score = 0; //전체 정답 개수
@@ -38,7 +39,9 @@ namespace screen
 	}
 	void Ing()	//게임 진행
 	{
-		if (Stage == 1) {//2스테이지(0,1)
+		if (Stage == 5) {//2스테이지(0,1)
+			Music::soundManager->StopMusic(Music::eSoundChannel::Effect);
+			Music::soundManager->PlayMusic(Music::eSoundList::win, Music::eSoundChannel::BGM);
 			state = 2;
 			Feature::Ranking(names, Score); //랭킹 갱신
 		}
@@ -62,6 +65,7 @@ namespace screen
 		else {
 			//타임아웃체크
 			if (StageTimer > StageLimit) {
+				Music::soundManager->PlayMusic(Music::eSoundList::fail, Music::eSoundChannel::Effect);
 				Stage++;
 				StageScore = 0;
 				changeCheck = true;
@@ -79,39 +83,48 @@ namespace screen
 		Feature::DrawAnimation(anifilename, anifilenames); //화면 전환 애니메이션 
 		Feature::DrawHint();//힌트 렌더링
 		DrawIngInfo(); //현재 정보
+		Feature::DrawRankingInfo();
 		render::DrawText(90, 60, util::IntToChar(StageTimer), RGB(253, 208, 0), 100); //타이머(애니메이션전환)
+		if(Feature::GetStartAnimation())Feature::DrawStartAnimation();
 	}
 	void End()//엔딩
 	{
 		render::DrawBackGround("source//WIN.bmp", 2390, 1162, 0, 0, false);
 		Feature::DrawRanking();
-		DrawIngInfo();
+		Feature::DrawRankingInfo();
+		//DrawIngInfo();
 	}
 	void DrawStartInfo() {
-
 		render::DrawText(1200 - (util::CheckSize(names) * 32), 200, names, RGB(253, 208, 0), 100);
 		render::DrawText(850, 300,"틀린그림찾기", RGB(253, 255, 255), 150);
 		render::DrawText(2240 - (util::CheckSize(names) * 10), 680, names, RGB(253, 208, 0), 30);
+		Feature::DrawRankingInfo();
 	}
 	void DrawIngInfo() {
-
 		char* scores;
 		scores = util::IntToChar(Score);
-		
 		render::DrawText(145 - (util::CheckSize(names)), 40, names, RGB(253, 208, 0), 30);
 		render::DrawText(90, 60, scores, RGB(253, 208, 0), 100);
 	}
 	void StartInput(input::MouseState mouse) {
 		if ((mouse.x > 820 && mouse.x < 1550) && (mouse.y > 600 && mouse.y < 800))  //시작버튼
 		{
+			Music::soundManager->PlayMusic(Music::eSoundList::start, Music::eSoundChannel::Effect);
+			std::random_device rd;
+			std::mt19937 gen(rd());  // Mersenne Twister 알고리즘을 사용한 랜덤 숫자 생성기
+			std::uniform_int_distribution<> dis(1, 19);  // 1부터 100까지의 정수
+			int randomNumber = dis(gen);
+
 			for (int i = 0; i < 5; i++) 
-				screen::imagenum[i] = rand() % 19 + 1;
+				screen::imagenum[i] = dis(gen);
+			
 			StageTimer = 0;
 			Stage = 0; //현재 스테이지
 			StageScore = 0;//스테이지 스코어(5개 맞추기)
 			Score = 0; //전체 정답 개수
 			char* names = new char[10];
 			changeCheck = false;
+			Feature::SetStartAnimation();
 			Feature::InitFeature();
 			state = 1;
 			Feature::StageInit();
@@ -127,15 +140,21 @@ namespace screen
 			Score++;
 			StageScore++;
 			if (StageScore == 5) {
+				Music::soundManager->PlayMusic(Music::eSoundList::success, Music::eSoundChannel::Effect);
 				Stage++;
 				StageScore = 0;
 				changeCheck = true;
 				Feature::SetAnimation(true);
 			}
 		}
+		else {
+			StageTimer += 2000; //시간 제한
+			ClickTimer -= 2000; //클릭 제한
+		}
 	}
 	void EndInput(input::MouseState mouse) {
 		state = 0;
+		Music::soundManager->PlayMusic(Music::eSoundList::StartBGM, Music::eSoundChannel::BGM);
 		/*
 		//나가기
 		if (mouse.left && (mouse.x > 0 && mouse.x < 1024) && (mouse.y > 0&& mouse.y < 768) && state == 0)  //시작버튼

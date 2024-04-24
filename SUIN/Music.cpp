@@ -4,6 +4,7 @@
 namespace Music
 {
     SoundManager* SoundManager::mInstance = nullptr;
+    SoundManager* soundManager = SoundManager::GetInstance();  // ÃÊ±âÈ­  
 
     SoundManager* SoundManager::GetInstance()
     {

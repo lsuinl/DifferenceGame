@@ -12,7 +12,11 @@ namespace Feature
 	void SetAnimation(bool right);
 	bool GetAnimation();
 	void DrawAnimation(const char* , const char*);
+	void SetStartAnimation();
+	bool GetStartAnimation();
+	void DrawStartAnimation();
 	void Ranking(const char*, int score);
+	void DrawRankingInfo();
 	void DrawRanking();
 	void InitFeature();
-}
+}		
