@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+
 
 // FMOD
 #ifndef _WIN64
@@ -28,12 +28,18 @@ namespace Music
         StartBGM1,
         StartBGM2,
         StartBGM3,
-        correct,
+        correct1,
+        correct2,
+        correct3,
+        correct4,
+        correct5,
         wrong,
-        perfect,
-        defect,
+        win,
         hint,
-        Size
+        start,
+        success,
+        fail,
+        Size,
     };
 
     class SoundManager final

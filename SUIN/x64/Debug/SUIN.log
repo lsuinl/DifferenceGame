@@ -1,16 +1,9 @@
-﻿  GameManager.cpp
-C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\GameManager.cpp(102,24): warning C4244: '인수': 'WPARAM'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\GameManager.cpp(104,22): warning C4244: '인수': 'WPARAM'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  MainFeature.cpp
-C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\MainFeature.cpp(87,37): warning C4244: '+=': 'ULONGLONG'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\MainFeature.cpp(141,33): warning C4244: '+=': 'ULONGLONG'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Music.cpp
-  ScreenManager.cpp
+﻿  ScreenManager.cpp
 C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\ScreenManager.cpp(30,15): warning C4244: '+=': 'ULONGLONG'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\ScreenManager.cpp(31,17): warning C4244: '+=': 'ULONGLONG'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\ScreenManager.cpp(32,17): warning C4244: '+=': 'ULONGLONG'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\ScreenManager.cpp(85,25): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\ScreenManager.cpp(87,25): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\ScreenManager.cpp(96,24): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  util.cpp
+C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\util.cpp(26,34): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\User\Documents\GitHub\DifferenceGame\SUIN\util.cpp(36,35): warning C4267: '+=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다...
   SUIN.vcxproj -> C:\Users\User\Documents\GitHub\DifferenceGame\x64\Debug\SUIN.exe

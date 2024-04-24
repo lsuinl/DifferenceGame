@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include "InputSystem.h"
 #include "SUIN.h"
 namespace screen
@@ -14,7 +13,7 @@ namespace screen
 	extern int imagenum[5];
 	extern int image;
 	extern int mousex, mousey;
-	extern std::string names;
+	extern char* names;
 
 	void SetImage(int num);
 	void TimesUpdate(ULONGLONG delta);

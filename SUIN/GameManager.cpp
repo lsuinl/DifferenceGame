@@ -6,24 +6,26 @@
 #include "Music.h"
 #include "MainFeature.h"
 #include "ScreenManager.h"
-#include <string>
 #include <cstdlib>
-
+#include "util.h"
 #define SCREEN_WIDTH 2400
 #define SCREEN_HEIGHT 1200
 
 namespace game
 {
 	Music::SoundManager* soundManager = Music::SoundManager::GetInstance();
+
 	void UpdatePlayer()
 	{
 		//키보드 이벤트
 		if (screen::state == 0 && screen::KeyTimer > screen::KeyLimit) {
 			screen::KeyTimer = 0;
-			if (GetAsyncKeyState(VK_BACK) & 0x8000 && !screen::names.empty())
-				screen::names.pop_back();
-			else if(screen::names.length()<10)
-				screen::names += input::GetPressedKey();
+			if (GetAsyncKeyState(VK_BACK) & 0x8000 && screen::names[0] != '\0')
+				screen::names[util::CheckSize(screen::names)-1] = '\0';
+			else if (util::CheckSize(screen::names) < 10) {
+				const char* plus[] = {screen::names, input::GetPressedKey()};
+				screen::names = util::SumChar(plus, 2);
+			}
 		}
 		//클릭 이벤트
 		const input::MouseState& mouse = input::GetMouseState();
@@ -48,10 +50,25 @@ namespace game
 		input::InitInput();
 		ts::InitTime();
 		render::InitRender();
+		//이름초기화
+		for (int i = 0; i < 11; i++)
+			screen::names[i] = '\0';
 		// SoundManager를 사용하여 음악 로드
-		soundManager->LoadMusic(Music::eSoundList::StartBGM1, false, "source/sound/bgm1.mp3");
-		soundManager->LoadMusic(Music::eSoundList::StartBGM2, false, "source/sound/bgm2.mp3");
-		soundManager->LoadMusic(Music::eSoundList::StartBGM3, false, "source/sound/bgm3.mp3");
+		soundManager->LoadMusic(Music::eSoundList::StartBGM1, false, "source//sound//bgm1.mp3");//배경음악
+		soundManager->LoadMusic(Music::eSoundList::StartBGM2, false, "source//sound//bgm2.mp3");
+		soundManager->LoadMusic(Music::eSoundList::StartBGM3, false, "source//sound//bgm3.mp3");
+		soundManager->LoadMusic(Music::eSoundList::correct1, false, "source//sound//correct1.mp3");//정답효과음
+		soundManager->LoadMusic(Music::eSoundList::correct2, false, "source//sound//correct2.mp3");
+		soundManager->LoadMusic(Music::eSoundList::correct3, false, "source//sound//correct3.mp3");
+		soundManager->LoadMusic(Music::eSoundList::correct4, false, "source//sound//correct4.mp3");
+		soundManager->LoadMusic(Music::eSoundList::correct5, false, "source//sound//correct5.mp3");
+		soundManager->LoadMusic(Music::eSoundList::wrong, false, "source//sound//wrong.mp3");//오답효과음
+		soundManager->LoadMusic(Music::eSoundList::win, false, "source//sound//Win.mp3");//엔딩효과음
+		soundManager->LoadMusic(Music::eSoundList::hint, false, "source//sound//hint.mp3");//힌트 효과음
+		soundManager->LoadMusic(Music::eSoundList::start, false, "source//sound//start.mp3");//시작 효과음
+		soundManager->LoadMusic(Music::eSoundList::success, false, "source//sound//success.mp3");//스테이지 성공 효과음
+		soundManager->LoadMusic(Music::eSoundList::fail, false, "source//sound//fail.mp3");//스테이지 실패 효과음
+
 		// SoundManager 초기화
 		soundManager->SetVolume(0.5f);
 	}

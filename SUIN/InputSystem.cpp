@@ -1,6 +1,5 @@
 #include "SUIN.h"
 #include "InputSystem.h"
-#include <string>
 
 namespace input
 {
@@ -21,7 +20,7 @@ namespace input
         }
     }
 
-    void KeyDown(unsigned int key)    {
+    void KeyDown(unsigned int key) {
         isKeyDown[key] = true;
         isKey[key] = true;
     }
@@ -106,30 +105,32 @@ namespace input
         return a.x == b.x && a.y == b.y && a.wheel == b.wheel && a.left == b.left && a.right == b.right && a.middle == b.middle;
     }
 
-    std::string GetPressedKey() {
-        std::string name = "";  // 입력된 키의 문자를 저장할 문자열
-
+    char* GetPressedKey() {
         BYTE keyboardState[256];  // 키보드 상태를 저장할 배열
+        char* name = new char[11];  // 입력된 키의 문자를 저장할 문자열 (+1은 null 문자를 위해)
+
+        int index = 0;  // 문자열 인덱스
 
         // 현재 키보드 상태 가져오기
         if (!GetKeyboardState(keyboardState)) {
-            return "";
+            return name;
         }
 
         // 각 키보드 키에 대해 상태 확인
         for (int i = 0; i < 256; ++i) {
             if (keyboardState[i] & 0x80) {  // 키가 눌렸는지 확인
-                //if (keyboardState[0x08]) continue;
                 char buffer[2] = { 0, 0 };
                 // 키보드 상태를 문자로 변환
                 if (ToAscii(i, 0, keyboardState, (LPWORD)buffer, 0)) {
-                    name += buffer;
-                    if (name.length() >= 10) {  // 최대 길이 검사
-                        break;
+                    if (index < 10) {  // 최대 길이 검사
+                        name[index] = buffer[0];
+                        ++index;
                     }
                 }
             }
         }
+
+        name[index] = '\0';  // 문자열 끝에 null 문자 추가
 
         return name;
     }

@@ -1,6 +1,7 @@
 #include "SUIN.h"
 #include "RenderSystem.h"
 #include <Windows.h>
+#include "util.h"
 #pragma comment(lib, "msimg32.lib")
 
 namespace render
@@ -128,7 +129,7 @@ namespace render
     void DrawText(int x, int y, const char* text, COLORREF color,int fontsize)
     {
         // 폰트 추가 생성
-        AddFontResource(TEXT("source/font/BlackHanSans-Regular.ttf"));
+        AddFontResource(TEXT("source//font//BlackHanSans-Regular.ttf"));
         HFONT currentFont = CreateFont(fontsize, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, TEXT("Black Han Sans"));
 
         // 백 버퍼에 텍스트 그리기
@@ -136,7 +137,7 @@ namespace render
         SetTextColor(backMemDC, color);
         SetTextColor(backMemDC, color);
         SetBkMode(backMemDC, TRANSPARENT); // 배경을 투명으로 설정
-        TextOutA(backMemDC, x, y, text, strlen(text));
+        TextOutA(backMemDC, x, y, text, util::CheckSize(text));
         SelectObject(backMemDC, oldFont);
         SelectObject(backMemDC, oldFont);
 
@@ -211,7 +212,7 @@ namespace render
 
     HBITMAP LoadImages(const char* path,int width,int height)
     {
-        HBITMAP hBitmap = (HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, width, height, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+        HBITMAP hBitmap = (HBITMAP)LoadImageA(NULL, path, IMAGE_BITMAP, width, height, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
         return hBitmap;
     }

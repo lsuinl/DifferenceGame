@@ -4,7 +4,7 @@
 #include "GameManager.h"
 #include "TimeSystem.h"
 #include "Music.h"
-#include <string>
+#include "util.h"
 struct rank {
 	const char* name;
 	int score;
@@ -12,6 +12,7 @@ struct rank {
 
 namespace Feature
 {
+		 
 	bool rightnum[5] = { 0,0,0,0,0 };
 	int hintRe = 5;
 	int xpos[5], ypos[5], cx[5], cy[5];
@@ -58,17 +59,17 @@ namespace Feature
 	}
 	void DrawRanking() {
 		render::DrawText(1000, 345, ranks[0]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 345, std::to_string(ranks[0]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1300, 345, util::IntToChar(ranks[0]->score), RGB(255, 255, 255), 30);
 		render::DrawText(1000, 390, ranks[1]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 390, std::to_string(ranks[1]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1300, 390, util::IntToChar(ranks[1]->score), RGB(255, 255, 255), 30);
 		render::DrawText(1000, 435, ranks[2]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 435, std::to_string(ranks[2]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1300, 435, util::IntToChar(ranks[2]->score), RGB(255, 255, 255), 30);
 		render::DrawText(1000, 480, ranks[3]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 480, std::to_string(ranks[3]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1300, 480, util::IntToChar(ranks[3]->score), RGB(255, 255, 255), 30);
 		render::DrawText(1000, 525, ranks[4]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 525, std::to_string(ranks[4]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1300, 525, util::IntToChar(ranks[4]->score), RGB(255, 255, 255), 30);
 		render::DrawText(1000, 570, ranks[5]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1300, 570, std::to_string(ranks[5]->score).c_str(), RGB(255, 255, 255), 30);
+		render::DrawText(1300, 570, util::IntToChar(ranks[5]->score), RGB(255, 255, 255), 30);
 	}
 
 	void FeatureInit() {
@@ -87,9 +88,9 @@ namespace Feature
 			AnimationTime += ts::GetDeltaTime();
 			if (AnimationTime < LogoLimit) {//로고 띄우기
 				if(perfect)
-					render::DrawBackGround("source/perfect.bmp", 1300, 562, 500, 300, true);
+					render::DrawBackGround("source//perfect.bmp", 1300, 562, 500, 300, true);
 				else 
-					render::DrawBackGround("source/defect.bmp", 1300, 562, 500, 300, true);
+					render::DrawBackGround("source//defect.bmp", 1300, 562, 500, 300, true);
 			}
 			else if(AnimationTime < AnimationLimit) {//애니메이션 젼환
 				render::DrawBackGround(pic1, 855, 930 - ((AnimationLimit - AnimationTime)), 330, 40, false);
@@ -105,8 +106,8 @@ namespace Feature
 	void DrawCorrect( ) {
 		for (int i = 0; i < 5; i++) {
 			if(rightnum[i] == true) {
-				render::DrawBackGround("source/correct.bmp", cx[i], cy[i], xpos[i], ypos[i], true);
-				render::DrawBackGround("source/correct.bmp", cx[i], cy[i], xpos[i] + 870, ypos[i], true);
+				render::DrawBackGround("source//correct.bmp", cx[i], cy[i], xpos[i], ypos[i], true);
+				render::DrawBackGround("source//correct.bmp", cx[i], cy[i], xpos[i] + 870, ypos[i], true);
 			}
 		}
 	}
@@ -144,11 +145,11 @@ namespace Feature
 				hint = false;
 			}
 			if (!rightnum[hintIndex]) { //맞추면 안보여줌
-				render::DrawBackGround("source/hint.bmp", cx[hintIndex], cy[hintIndex], xpos[hintIndex], ypos[hintIndex], true);
-				render::DrawBackGround("source/hint.bmp", cx[hintIndex], cy[hintIndex], xpos[hintIndex] + 870, ypos[hintIndex], true);
+				render::DrawBackGround("source//hint.bmp", cx[hintIndex], cy[hintIndex], xpos[hintIndex], ypos[hintIndex], true);
+				render::DrawBackGround("source//hint.bmp", cx[hintIndex], cy[hintIndex], xpos[hintIndex] + 870, ypos[hintIndex], true);
 			}
 		}
-		render::DrawText(850, 985, std::to_string(hintRe).c_str(), RGB(253, 208, 0), 50);
+		render::DrawText(850, 985, util::IntToChar(hintRe), RGB(253, 208, 0), 50);
 	}
 	void SetPos(int num) {
 		if (num == 1) {//1번

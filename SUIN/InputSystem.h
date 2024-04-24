@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+
 namespace input
 {
     void InitInput();
@@ -42,6 +42,6 @@ namespace input
 
     const MouseState& GetMouseState();
     const MouseState& GetPrevMouseState();
-    std::string GetPressedKey();
+    char* GetPressedKey();
 
 }
