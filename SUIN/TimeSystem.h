@@ -12,7 +12,6 @@ namespace ts
 
 }
 
-
 namespace high_resolution_time
 {
 	void InitTime();

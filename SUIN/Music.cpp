@@ -9,10 +9,7 @@ namespace Music
     SoundManager* SoundManager::GetInstance()
     {
         if (mInstance == nullptr)
-        {
             mInstance = new SoundManager();
-        }
-
         return mInstance;
     }
 
@@ -28,14 +25,9 @@ namespace Music
         mSystem->init(2, FMOD_INIT_NORMAL, 0);
 
         if (loopcheck)
-        {
             mSystem->createSound(music, FMOD_LOOP_NORMAL, 0, &mSoundList[static_cast<int>(soundlist)]);
-        }
         else
-        {
             mSystem->createSound(music, FMOD_LOOP_OFF, 0, &mSoundList[static_cast<int>(soundlist)]);
-        }
-
     }
 
     void SoundManager::PlayMusic(eSoundList soundlist, eSoundChannel channel)
@@ -54,16 +46,10 @@ namespace Music
     {
         mVolume = volume;
         for (unsigned int i = 0; i < static_cast<unsigned int>(eSoundChannel::Size); ++i)
-        {
             mChannel[i]->setVolume(mVolume);
-        }
     }
 
-    SoundManager::SoundManager()
-        : mSystem()
-        , mChannel{}
-        , mSoundList{}
-        , mVolume(0.5f)
+    SoundManager::SoundManager(): mSystem(), mChannel{}, mSoundList{}, mVolume(0.5f)
     {
     }
 

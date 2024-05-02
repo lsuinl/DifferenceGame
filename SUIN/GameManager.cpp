@@ -15,11 +15,13 @@ namespace game
 {
 	void UpdatePlayer()
 	{
-		//키보드 이벤트
-		if (screen::state == 0 && screen::KeyTimer > screen::KeyLimit) {
-			screen::KeyTimer = 0;
+		//키보드 이벤트 첫 페이지에서만 작용. 
+		if (screen::state == 0 && screen::keyTimer > screen::keyLimit) {
+			screen::keyTimer = 0;
+			//공백문자==뒤로가기
 			if (GetAsyncKeyState(VK_BACK) & 0x8000 && screen::names[0] != '\0')
 				screen::names[util::CheckSize(screen::names)-1] = '\0';
+			//글자제한+입력한 글자 입력
 			else if (util::CheckSize(screen::names) < 10) {
 				const char* plus[] = {screen::names, input::GetPressedKey()};
 				screen::names = util::SumChar(plus, 2);
@@ -28,8 +30,8 @@ namespace game
 		//클릭 이벤트
 		const input::MouseState& mouse = input::GetMouseState();
 		const input::MouseState& prevmouse = input::GetPrevMouseState();
-			if (mouse.left && screen::ClickTimer > screen::ClickLimit) {
-				screen::ClickTimer = 0;
+			if (mouse.left && screen::clickTimer > screen::clickLimit) {
+				screen::clickTimer = 0;
 				if (screen::state == 0) 
 					screen::StartInput(mouse);
 				else if (screen::state == 1) 
@@ -43,65 +45,55 @@ namespace game
 	GameManager::~GameManager(){}
 	void GameManager::Initialize()
 	{
-		Feature::FeatureInit();
-		Feature::SetPos(screen::imagenum[0]);
+		render::InitRender();
 		input::InitInput();
 		ts::InitTime();
-		render::InitRender();
-		//이름초기화
-		for (int i = 0; i < 11; i++)
-			screen::names[i] = '\0';
-		Music::soundManager->GetInstance();
-		// SoundManager를 사용하여 음악 로드
-		Music::soundManager->LoadMusic(Music::eSoundList::StartBGM, false, "source//sound//bgm1.mp3");//배경음악
+		for (int i = 0; i < 11; i++) screen::names[i] = '\0';	//이름초기화
+		Music::soundManager->GetInstance(); //사운드매니저 셋팅
+		Music::soundManager->LoadMusic(Music::eSoundList::StartBGM, true, "source//sound//bgm3.mp3");//배경음악
 		//Music::soundManager->LoadMusic(Music::eSoundList::StartBGM2, false, "source//sound//bgm2.mp3");
 		//Music::soundManager->LoadMusic(Music::eSoundList::StartBGM3, false, "source//sound//bgm3.mp3");
-		Music::soundManager->LoadMusic(Music::eSoundList::correct, false, "source//sound//correct1.mp3");//정답효과음
-		//Music::soundManager->LoadMusic(Music::eSoundList::correct2, false, "source//sound//correct2.mp3");
-		//Music::soundManager->LoadMusic(Music::eSoundList::correct3, false, "source//sound//correct3.mp3");
-		//Music::soundManager->LoadMusic(Music::eSoundList::correct4, false, "source//sound//correct4.mp3");
-		//Music::soundManager->LoadMusic(Music::eSoundList::correct5, false, "source//sound//correct5.mp3");
+		Music::soundManager->LoadMusic(Music::eSoundList::correct, false, "source//sound//correct3.mp3");//정답효과음
+
 		Music::soundManager->LoadMusic(Music::eSoundList::wrong, false, "source//sound//wrong.mp3");//오답효과음
 		Music::soundManager->LoadMusic(Music::eSoundList::hint, false, "source//sound//hint.mp3");//힌트 효과음
 		Music::soundManager->LoadMusic(Music::eSoundList::win, false, "source//sound//Win.mp3");//엔딩효과음
 		Music::soundManager->LoadMusic(Music::eSoundList::start, false, "source//sound//start.mp3");//시작 효과음
 		Music::soundManager->LoadMusic(Music::eSoundList::success, false, "source//sound//success.mp3");//스테이지 성공 효과음
 		Music::soundManager->LoadMusic(Music::eSoundList::fail, false, "source//sound//fail.mp3");//실패
-	
-		
-		// SoundManager 초기화
-		Music::soundManager->SetVolume(0.5f);
+
+		Music::soundManager->SetVolume(0.5f); //크기조정
 	}
 	void GameManager::Update()
 	{
 		ULONGLONG delta = ts::GetDeltaTime();
-		++m_UpdateCount;
-		input::UpdateMouse();
 		ts::UpdateTime();
-		UpdatePlayer();
+
+		input::UpdateMouse();
 		input::ResetInput();
+		
+		UpdatePlayer();
+		
 		screen::TimesUpdate(delta);
 	}
 	void GameManager::Render()
 	{
 		render::BeginDraw();
-		if (screen::state == 0)
-			screen::Title();
-		else if (screen::state == 1)
-			screen::Ing();
-		else
-			screen::End();
+		//페이지 넘버에 따른 화면 렌더링
+		if (screen::state == 0) screen::Title();
+		else if (screen::state == 1) screen::Ing();
+		else screen::End();
 		render::EndDraw();
 	}
 	void GameManager::Finalize()
 	{
 		render::ReleaseRender();
-		Music::SoundManager::DestroyInstance();// SoundManager 해제
+		Music::SoundManager::DestroyInstance();// 사운드매니저 해제
 	}
 	void GameManager::Run()
 	{
 		MSG msg;
-		Music::soundManager->PlayMusic(Music::eSoundList::StartBGM, Music::eSoundChannel::BGM);// SoundManager를 사용하여 음악 재생
+		Music::soundManager->PlayMusic(Music::eSoundList::StartBGM, Music::eSoundChannel::BGM);//음악 재생
 		while (true)
 		{
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -120,7 +112,6 @@ namespace game
 				Render();
 			}
 		}
-		Music::soundManager->StopMusic(Music::eSoundChannel::BGM);// SoundManager를 사용하여 음악 중지 및 해제
 	}
 	GameManager* GameManager::GetInstance()
 	{

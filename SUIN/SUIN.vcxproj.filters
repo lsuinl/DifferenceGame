@@ -47,6 +47,7 @@
     <ClInclude Include="util.h">
       <Filter>feature</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TimeSystem.cpp">
@@ -218,10 +219,18 @@
     <None Include="source\mp31.bin">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="POINTER.cur">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Font Include="source\font\BlackHanSans-Regular.ttf">
       <Filter>리소스 파일</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SUIN.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

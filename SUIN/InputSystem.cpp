@@ -108,7 +108,6 @@ namespace input
     char* GetPressedKey() {
         BYTE keyboardState[256];  // 키보드 상태를 저장할 배열
         char* name = new char[11];  // 입력된 키의 문자를 저장할 문자열 (+1은 null 문자를 위해)
-
         int index = 0;  // 문자열 인덱스
 
         // 현재 키보드 상태 가져오기
@@ -131,7 +130,6 @@ namespace input
         }
 
         name[index] = '\0';  // 문자열 끝에 null 문자 추가
-
         return name;
     }
 }

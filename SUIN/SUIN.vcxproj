@@ -142,6 +142,7 @@
     <ClInclude Include="Music.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="ScreenManager.h" />
     <ClInclude Include="SUIN.h" />
     <ClInclude Include="TimeSystem.h" />
@@ -206,10 +207,14 @@
     <Image Include="SUIN.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="POINTER.cur" />
     <None Include="source\mp31.bin" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="source\font\BlackHanSans-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SUIN.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,4 @@
 #pragma once
-
-
-
 // FMOD
 #ifndef _WIN64
 #include "fmod.hpp"
@@ -42,17 +39,20 @@ namespace Music
     {
     public:
         static SoundManager* GetInstance();
+
         static void DestroyInstance();
 
         void LoadMusic(eSoundList list, bool loopcheck, const char* music);
 
         void PlayMusic(eSoundList list, eSoundChannel channel);
+
         void StopMusic(eSoundChannel channel);
 
         void SetVolume(float volume);
 
     private:
         SoundManager();
+
         ~SoundManager();
 
     private:

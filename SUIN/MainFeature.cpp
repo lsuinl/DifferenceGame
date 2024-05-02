@@ -16,11 +16,11 @@ namespace Feature
 	int xpos[5], ypos[5], cx[5], cy[5];
 
 	//logo: 성공, 실패 로고, Animation: 화면전환애니메이션
-	bool Animation = false, perfect;
-	int LogoLimit = 1000, AnimationLimit = 2000, AnimationTime = 0; 
+	bool animation = false, perfect;
+	int logoLimit = 1000, animationLimit = 2000, animationTime = 0; 
 	//시작 애니메이션 
-	bool StartAnimation = false;
-	int StartAnimationLimit = 2500, StartAnimationTime = 0;
+	bool startAnimation = false;
+	int startAnimationLimit = 2500, startAnimationTime = 0;
 	//힌트
 	bool hint = false;
 	int hintLimit = 5000,hintTime=0, hintIndex=-1;
@@ -35,14 +35,17 @@ namespace Feature
 	new rank{"Player6", 10}
 	}; 
 
-	void InitFeature() {
+	void InitFeature() 
+	{
 		 hintRe = 5;
 		 hint = false;
-		 Animation = false;
-		 AnimationTime = 0;
+		 animation = false;
+		 animationTime = 0;
 		 hintTime = 0;
 	}
-	void Ranking(const char* name, int score) {
+
+	void Ranking(const char* name, int score)
+	{
 		int check = 6;
 		for (int i = 0; i < 6; i++) {
 			if (ranks[i]->score <= score) {
@@ -57,98 +60,91 @@ namespace Feature
 		}
 		ranks[check] = new rank{ name, score };  // 새로운 Rank 객체를 동적으로 할당하여 저장합니다.
 	}
-	void DrawRankingInfo() {
-		render::DrawText(110 - (util::CheckSize(ranks[0]->name)), 40, ranks[0]->name, RGB(255, 255, 255), 30);
-		render::DrawText(90, 60, util::IntToChar(ranks[0]->score), RGB(253, 208, 0), 100);
-		render::DrawText(110 - (util::CheckSize(ranks[1]->name)), 360, ranks[1]->name, RGB(255, 255, 255), 30);
-		render::DrawText(90, 380, util::IntToChar(ranks[1]->score), RGB(253, 208, 0), 100);
-		render::DrawText(110 - (util::CheckSize(ranks[2]->name)), 670, ranks[2]->name, RGB(255, 255, 255), 30);
-		render::DrawText(90, 690, util::IntToChar(ranks[2]->score), RGB(253, 208, 0), 100);
-		render::DrawText(2245 - (util::CheckSize(ranks[3]->name)), 40, ranks[3]->name, RGB(255, 255, 255), 30);
-		render::DrawText(2155, 60, util::IntToChar(ranks[3]->score), RGB(253, 208, 0), 100);
-		render::DrawText(2245 - (util::CheckSize(ranks[4]->name)), 360, ranks[4]->name, RGB(255, 255, 255), 30);
-		render::DrawText(2155, 380, util::IntToChar(ranks[4]->score), RGB(253, 208, 0), 100);
-		render::DrawText(2245 - (util::CheckSize(ranks[5]->name)), 670, ranks[5]->name, RGB(255, 255, 255), 30);
-		render::DrawText(2155, 690, util::IntToChar(ranks[5]->score), RGB(253, 208, 0), 100);
+
+	void DrawRankingInfo(const char* names, int score) 
+	{
+		render::DrawText(145 - (util::CheckSize(names) * 7), 40, names, RGB(253, 208, 0), 30);
+		render::DrawText(90, 60, util::IntToChar(score), RGB(253, 208, 0), 100);
+		render::DrawText(145 - (util::CheckSize(ranks[0]->name) * 7), 360, ranks[1]->name, RGB(255, 255, 255), 30);
+		render::DrawText(90, 380, util::IntToChar(ranks[0]->score), RGB(253, 208, 0), 100);
+		render::DrawText(145 - (util::CheckSize(ranks[1]->name) * 7), 670, ranks[2]->name, RGB(255, 255, 255), 30);
+		render::DrawText(90, 690, util::IntToChar(ranks[1]->score), RGB(253, 208, 0), 100);
+		render::DrawText(2230 - (util::CheckSize(ranks[2]->name) * 7), 40, ranks[3]->name, RGB(255, 255, 255), 30);
+		render::DrawText(2180, 60, util::IntToChar(ranks[2]->score), RGB(253, 208, 0), 100);
+		render::DrawText(2230 - (util::CheckSize(ranks[3]->name) * 7), 360, ranks[4]->name, RGB(255, 255, 255), 30);
+		render::DrawText(2180, 380, util::IntToChar(ranks[3]->score), RGB(253, 208, 0), 100);
+		render::DrawText(2230 - (util::CheckSize(ranks[4]->name)*7), 670, ranks[5]->name, RGB(255, 255, 255), 30);
+		render::DrawText(2180, 690, util::IntToChar(ranks[4]->score), RGB(253, 208, 0), 100);
 	}
 
-	void DrawRanking() {
-		render::DrawText(900, 315, ranks[0]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1220, 315, util::IntToChar(ranks[0]->score), RGB(255, 255, 255), 30);
-		render::DrawText(900, 357, ranks[1]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1220, 357, util::IntToChar(ranks[1]->score), RGB(255, 255, 255), 30);
-		render::DrawText(900, 399, ranks[2]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1220, 399, util::IntToChar(ranks[2]->score), RGB(255, 255, 255), 30);
-		render::DrawText(900, 441, ranks[3]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1220, 441, util::IntToChar(ranks[3]->score), RGB(255, 255, 255), 30);
-		render::DrawText(900, 488, ranks[4]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1220, 488, util::IntToChar(ranks[4]->score), RGB(255, 255, 255), 30);
-		render::DrawText(900, 530, ranks[5]->name, RGB(255, 255, 255), 30);
-		render::DrawText(1220, 530, util::IntToChar(ranks[5]->score), RGB(255, 255, 255), 30);
+	void DrawRanking() 
+	{
+		int yname[6] = {315,357,399,441,488,530};
+		for (int i = 0; i < 6; i++) {
+			render::DrawText(900, yname[i], ranks[i]->name, RGB(255, 255, 255), 30);
+			render::DrawText(1220, yname[i], util::IntToChar(ranks[i]->score), RGB(255, 255, 255), 30);
+		}
 	}
 
-
-
-	void FeatureInit() {
-		ts::InitTime();
-	}
-	void SetAnimation(bool right) {
+	void SetAnimation(bool right) 
+	{
 		perfect = right;
-		Animation = true;
+		animation = true;
 	}
-	bool GetAnimation() {
-		return Animation;
+
+	bool GetAnimation() 
+	{
+		return animation;
 	}
-	void DrawAnimation(const char* pic1, const char* pic2) {
-		if (Animation) {
-			ts::UpdateTime();
-			AnimationTime += ts::GetDeltaTime();
-			if (AnimationTime < LogoLimit) {//로고 띄우기
-				if(perfect)
-					render::DrawBackGround("source//perfect.bmp", 1300, 562, 500, 300, true);
-				else 
-					render::DrawBackGround("source//defect.bmp", 1300, 562, 500, 300, true);
+
+	void DrawAnimation(const char* pic1, const char* pic2)
+	{
+		if (animation) {
+			animationTime += ts::GetDeltaTime();
+			if (animationTime < logoLimit) {//로고 띄우기
+				if(perfect)render::DrawBackGround("source//perfect.bmp", 1700, 600, 400, 200, true);
+				else render::DrawBackGround("source//defect.bmp", 1200, 700, 600, 200, true);
 			}
-			else if(AnimationTime < AnimationLimit) {//애니메이션 젼환
-				render::DrawBackGround(pic1, 855, 930 - ((AnimationLimit - AnimationTime)), 330, 40, false);
-				render::DrawBackGround(pic2, 855, 930 - ((AnimationLimit - AnimationTime)), 1200, 40, false);
+			else if(animationTime < animationLimit) {//애니메이션 젼환
+				render::DrawBackGround(pic1, 855, 930 - ((animationLimit - animationTime)*0.93), 330, 40, false);
+				render::DrawBackGround(pic2, 855, 930 - ((animationLimit - animationTime) * 0.93), 1200, 40, false);
 			}
-			else if(AnimationTime >= AnimationLimit) { //전환 종료
-				AnimationTime = 0;
-				Animation = false;
-			}
-		}
-	}
-	void SetStartAnimation() {
-		StartAnimation = true;
-	}
-	bool GetStartAnimation() {
-		return StartAnimation;
-	}
-	void DrawStartAnimation() {
-		if (StartAnimation) {
-			StartAnimationTime += ts::GetDeltaTime();
-			if (StartAnimationTime < StartAnimationLimit-(2390/3)) {
-				render::DrawBackGround("source//START.bmp", 2390, 1162, 0, 0, false);
-			}
-			else if (StartAnimationTime < StartAnimationLimit) {//애니메이션 젼환
-				render::DrawBackGround("source//START.bmp", (StartAnimationLimit - StartAnimationTime)*3, 1162,0, 0, false);
-			}
-			else if (StartAnimationTime >= StartAnimationLimit) { //전환 종료
-				StartAnimationTime = 0;
-				StartAnimation = false;
+			else if(animationTime >= animationLimit) { //전환 종료
+				animationTime = 0;
+				animation = false;
 			}
 		}
 	}
-	void DrawCorrect( ) {
-		for (int i = 0; i < 5; i++) {
-			if(rightnum[i] == true) {
-				render::DrawBackGround("source//correct.bmp", cx[i], cy[i], xpos[i], ypos[i], true);
-				render::DrawBackGround("source//correct.bmp", cx[i], cy[i], xpos[i] + 870, ypos[i], true);
+
+	void SetStartAnimation()
+	{
+		startAnimation = true;
+	}
+
+	bool GetStartAnimation() 
+	{
+		return startAnimation;
+	}
+
+	void DrawStartAnimation()
+	{
+		if (startAnimation) {
+			startAnimationTime += ts::GetDeltaTime();
+			if (startAnimationTime < startAnimationLimit-(1770/3)) {
+				render::DrawBackGround("source//READY.bmp", 1770, 940, 300, 35, false);
+			}
+			else if (startAnimationTime < startAnimationLimit) {//애니메이션 젼환
+				render::DrawBackGround("source//READY.bmp", (startAnimationLimit - startAnimationTime)*3, 940, 300, 35, false);
+			}
+			else if (startAnimationTime >= startAnimationLimit) { //전환 종료
+				startAnimationTime = 0;
+				startAnimation = false;
 			}
 		}
 	}
-	bool CheckCorrect(int x, int y) {
+
+	bool CheckCorrect(int x, int y)
+	{
 		//범위안 먼저 체크
 		for (int i = 0; i < 5; i++) {
 			if (((xpos[i]<x && xpos[i] + cx[i]>x) || (xpos[i] + 870 < x && xpos[i] + 870 + cx[i] > x)) && ypos[i]<y && ypos[i] + cy[i]>y && !rightnum[i]) {
@@ -161,11 +157,19 @@ namespace Feature
 		Music::soundManager->PlayMusic(Music::eSoundList::wrong, Music::eSoundChannel::Effect);
 		return false;
 	}
-	void StageInit() {
-		for(int i=0;i<5;i++)
-			rightnum[i] = false;
+
+	void DrawCorrect()
+	{
+		for (int i = 0; i < 5; i++) {
+			if (rightnum[i] == true) {
+				render::DrawBackGround("source//correct.bmp", cx[i], cy[i], xpos[i], ypos[i], true);
+				render::DrawBackGround("source//correct.bmp", cx[i], cy[i], xpos[i] + 870, ypos[i], true);
+			}
+		}
 	}
-	void SetHint() {
+
+	void SetHint() 
+	{
 		if (hintRe > 0) {
 			Music::soundManager->PlayMusic(Music::eSoundList::hint, Music::eSoundChannel::Effect);
 			for (int i = 0; i < 5; i++) {
@@ -178,7 +182,9 @@ namespace Feature
 			hintRe--;
 		}
 	}
-	void DrawHint() {
+
+	void DrawHint() 
+	{
 		if (hint) {
 			if(hintTime < hintLimit)
 				hintTime += ts::GetDeltaTime();
@@ -193,7 +199,10 @@ namespace Feature
 		}
 		render::DrawText(850, 985, util::IntToChar(hintRe), RGB(253, 208, 0), 50);
 	}
-	void SetPos(int num) {
+
+	void SetPos(int num)
+	{
+		for (int i = 0; i < 5; i++) rightnum[i] = false;
 		if (num == 1) {//1번
 			xpos[0] = 410, xpos[1] = 500, xpos[2] = 550, xpos[3] = 870, xpos[4] = 850;
 			ypos[0] = 480, ypos[1] = 160, ypos[2] = 570, ypos[3] = 625, ypos[4] = 420;
@@ -230,7 +239,7 @@ namespace Feature
 			cx[0] = 100, cx[1] = 60, cx[2] = 60, cx[3] = 50, cx[4] = 60;
 			cy[0] = 60, cy[1] = 120, cy[2] = 60, cy[3] = 50, cy[4] = 60;
 		}
-		else if (num == 0) {//7번
+		else if (num == 7) {//7번
 			xpos[0] = 365, xpos[1] = 985, xpos[2] = 325, xpos[3] = 900, xpos[4] = 670;
 			ypos[0] = 550, ypos[1] = 580, ypos[2] = 400, ypos[3] = 100, ypos[4] = 390;
 			cx[0] = 50, cx[1] = 120, cx[2] = 50, cx[3] = 50, cx[4] = 50;
