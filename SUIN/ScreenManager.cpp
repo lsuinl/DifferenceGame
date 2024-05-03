@@ -10,7 +10,7 @@
 
 namespace screen
 {
-	 int state = 2; //0:타이틀, 1: 게임진행 2: 종료
+	 int state = 0; //0:타이틀, 1: 게임진행 2: 종료
 	 int clickLimit = 300, clickTimer = clickLimit; //클릭시간 제한
 	 int keyLimit = 90, keyTimer = keyLimit; //키보드입력시간 제한
 	 int stageLimit = 60000, stageTimer = 0; //스테이지 시간제한
