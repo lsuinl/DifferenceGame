@@ -27,12 +27,12 @@ namespace Feature
 	
 	//·©Å·
 	rank* ranks[6] = {
-	new rank{"Player1", 15},
-	new rank{"Player2", 14},
-	new rank{"Player3", 13},
-	new rank{"Player4", 12},
-	new rank{"Player5", 11},
-	new rank{"Player6", 10}
+	new rank{"Player1", 5},
+	new rank{"Player2", 4},
+	new rank{"Player3", 3},
+	new rank{"Player4", 2},
+	new rank{"Player5", 1},
+	new rank{"Player6", 1}
 	}; 
 
 	void InitFeature() 
